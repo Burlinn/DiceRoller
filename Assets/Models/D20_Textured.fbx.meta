@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 0553e4907e51bbb4e8144b339a7aa60a
-timeCreated: 1522898093
+guid: 37db495e4487f5e479f0c637e3f6df0e
+timeCreated: 1522979732
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
@@ -10,8 +10,7 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Icosphere
-    7400000: Default Take
-    9500000: //RootNode
+    6400000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -41,7 +40,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -81,7 +80,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
