@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 7b4ebac3c8b865f4599f03912355d781
+timeCreated: 1523116743
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - m_texture: {instanceID: 0}
+  - m_Instance: {instanceID: 0}
+  - D2: {fileID: 1678977676424566, guid: da7e67700f11bb94e96f4886d5ca8a11, type: 2}
+  - D4: {fileID: 1200296773725858, guid: 677f194cad034ec448187d4e20feb44b, type: 2}
+  - D6: {instanceID: 0}
+  - D10: {instanceID: 0}
+  - D12: {instanceID: 0}
+  - D20: {instanceID: 0}
+  - D100: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
