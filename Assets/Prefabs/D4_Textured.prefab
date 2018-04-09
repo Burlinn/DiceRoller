@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 54114653570948294}
   m_Layer: 0
   m_Name: D4_Textured
-  m_TagString: D4
+  m_TagString: Dice
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

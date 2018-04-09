@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 54826620194013146}
   m_Layer: 0
   m_Name: D6_Textured
-  m_TagString: Untagged
+  m_TagString: Dice
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

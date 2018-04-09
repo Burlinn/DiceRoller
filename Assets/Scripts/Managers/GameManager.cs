@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
     public CameraControl m_CameraControl;
     public Canvas m_MessageCanvas;
     public Button btnRoll;
+    public Button btnBack;
     public GameObject DiceSelector;
     public GameObject D2;
     public GameObject D4;
@@ -42,8 +43,8 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator GameLoop()
     {
-        //yield return StartCoroutine(ShowIntroScreen());
-        yield return StartCoroutine(ShowSelectScreen());
+        yield return StartCoroutine(ShowIntroScreen());
+        ShowSelectScreen();
         
 
     }
@@ -57,7 +58,7 @@ public class GameManager : MonoBehaviour {
         yield return m_StartWait;
     }
 
-    private IEnumerator ShowSelectScreen()
+    private void ShowSelectScreen()
     {
         GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
         GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
@@ -67,11 +68,14 @@ public class GameManager : MonoBehaviour {
         GameObject diceSelector = diceSelectors.transform.Find("DiceSelector").gameObject;
         GameObject btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
         GameObject btnRemove = diceSelector.transform.Find("btnRemove").gameObject;
+        diceSelector.transform.Find("lblTotal").gameObject.SetActive(false);
         btnAddNew.GetComponent<Button>().onClick.AddListener(delegate { AddNewClick(); });
         btnRemove.GetComponent<Button>().onClick.AddListener(delegate { RemoveClick(0); });
         btnRoll.GetComponent<Button>().onClick.AddListener(delegate { RollClick(); });
+        btnBack.GetComponent<Button>().onClick.AddListener(delegate { BackClick(); });
         diceSelector.name = "DiceSelector1";
-        yield return m_StartWait;
+        btnBack.gameObject.SetActive(false);
+        
     }
 
 
@@ -88,9 +92,11 @@ public class GameManager : MonoBehaviour {
             diceSelector = GameObject.Instantiate(DiceSelector);
             diceSelector.transform.parent = diceSelectors.transform;
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y - diceSelectionAdjustment, btnRoll.transform.position.z);
+            btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y - diceSelectionAdjustment, btnBack.transform.position.z);
             diceSelector.transform.position = new Vector3(lastSelector.transform.position.x, lastSelector.transform.position.y - diceSelectionAdjustment, lastSelector.transform.position.z);
             btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
             btnRemove = diceSelector.transform.Find("btnRemove").gameObject;
+            diceSelector.transform.Find("lblTotal").gameObject.SetActive(false);
             btnAddNew.GetComponent<Button>().onClick.AddListener(delegate { AddNewClick(); });
             btnRemove.GetComponent<Button>().onClick.AddListener(delegate { RemoveClick(diceSelectors.transform.childCount - 1); });
             diceSelector.name = "DiceSelector" + diceSelectors.transform.childCount;
@@ -113,6 +119,7 @@ public class GameManager : MonoBehaviour {
             }
 
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
+            btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y + diceSelectionAdjustment, btnBack.transform.position.z);
         }
     }
 
@@ -191,6 +198,43 @@ public class GameManager : MonoBehaviour {
         selectionScreen.SetActive(false);
     }
 
+    void BackClick()
+    {
+        m_DiceSets = new List<DiceSet>();
+        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
+        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
+        if (diceSelectors.transform.childCount > 1)
+        {
+            
+            for (int i = 0; i < diceSelectors.transform.childCount; i++)
+            {
+                if (i == 0)
+                {
+                    GameObject currentSelector = diceSelectors.transform.GetChild(i).gameObject;
+                    currentSelector.name = "DiceSelector";
+                    currentSelector.transform.Find("btnAddNew").gameObject.SetActive(true);
+                    currentSelector.transform.Find("btnRemove").gameObject.SetActive(true);
+                    currentSelector.transform.Find("lblTotal").gameObject.SetActive(false);
+                }
+                else { 
+                    GameObject currentSelector = diceSelectors.transform.GetChild(i).gameObject;
+                    Destroy(currentSelector);
+                }
+            }
+
+            btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
+            btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y + diceSelectionAdjustment, btnBack.transform.position.z);
+        }
+        GameObject[] allDice = GameObject.FindGameObjectsWithTag("Dice");
+        foreach (GameObject dice in allDice)
+        {
+            Destroy(dice);
+        }
+        btnRoll.gameObject.SetActive(true);
+        btnBack.gameObject.SetActive(false);
+
+    }
+
     GameObject FindLastSelector(GameObject diceSelectors)
     {
         GameObject lastSelector;
@@ -237,6 +281,7 @@ public class GameManager : MonoBehaviour {
             if (doneRolling == true)
             {
                 GetTotals();
+                ReShowSelectScreen();
             }
         }
     }
@@ -264,6 +309,31 @@ public class GameManager : MonoBehaviour {
         return noMovement;
     }
 
+    void ReShowSelectScreen()
+    {
+        
+        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
+        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
+
+        selectionScreen.SetActive(true);
+        
+        for (int i = 0; i < diceSelectors.transform.childCount; i++)
+        {
+            GameObject diceSelector = diceSelectors.transform.GetChild(i).gameObject;
+            DiceSet currentDiceSet = m_DiceSets[i];
+
+            diceSelector.transform.Find("btnAddNew").gameObject.SetActive(false);
+            diceSelector.transform.Find("btnRemove").gameObject.SetActive(false);
+            diceSelector.transform.Find("lblTotal").gameObject.SetActive(true);
+            diceSelector.transform.Find("lblTotal").GetComponent<Text>().text = "Total: " + currentDiceSet.total;
+
+        }
+        
+        btnBack.gameObject.SetActive(true);
+        btnRoll.gameObject.SetActive(false);
+
+    }
+
     void GetTotals()
     {
         int diceSetTotal = 0;
@@ -278,6 +348,7 @@ public class GameManager : MonoBehaviour {
             }
             diceSetTotal += currentDiceSet.modifier;
             currentDiceSet.total = diceSetTotal;
+            m_DiceSets[i] = currentDiceSet;
         }
     }
 }
