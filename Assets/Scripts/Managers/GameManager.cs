@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     public Canvas m_MessageCanvas;
     public Button btnRoll;
     public Button btnBack;
+    public Button btnQuit;
     public GameObject DiceSelector;
     public GameObject D2;
     public GameObject D4;
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour {
         btnRemove.GetComponent<Button>().onClick.AddListener(delegate { RemoveClick(0); });
         btnRoll.GetComponent<Button>().onClick.AddListener(delegate { RollClick(); });
         btnBack.GetComponent<Button>().onClick.AddListener(delegate { BackClick(); });
+        btnQuit.GetComponent<Button>().onClick.AddListener(delegate { QuitClick(); });
         diceSelector.name = "DiceSelector1";
         btnBack.gameObject.SetActive(false);
         
@@ -93,6 +95,7 @@ public class GameManager : MonoBehaviour {
             diceSelector.transform.parent = diceSelectors.transform;
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y - diceSelectionAdjustment, btnRoll.transform.position.z);
             btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y - diceSelectionAdjustment, btnBack.transform.position.z);
+            btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y - diceSelectionAdjustment, btnQuit.transform.position.z);
             diceSelector.transform.position = new Vector3(lastSelector.transform.position.x, lastSelector.transform.position.y - diceSelectionAdjustment, lastSelector.transform.position.z);
             btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
             btnRemove = diceSelector.transform.Find("btnRemove").gameObject;
@@ -120,6 +123,7 @@ public class GameManager : MonoBehaviour {
 
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
             btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y + diceSelectionAdjustment, btnBack.transform.position.z);
+            btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustment, btnQuit.transform.position.z);
         }
     }
 
@@ -203,28 +207,27 @@ public class GameManager : MonoBehaviour {
         m_DiceSets = new List<DiceSet>();
         GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
         GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
-        if (diceSelectors.transform.childCount > 1)
+        
+        for (int i = 0; i < diceSelectors.transform.childCount; i++)
         {
-            
-            for (int i = 0; i < diceSelectors.transform.childCount; i++)
+            if (i == 0)
             {
-                if (i == 0)
-                {
-                    GameObject currentSelector = diceSelectors.transform.GetChild(i).gameObject;
-                    currentSelector.name = "DiceSelector";
-                    currentSelector.transform.Find("btnAddNew").gameObject.SetActive(true);
-                    currentSelector.transform.Find("btnRemove").gameObject.SetActive(true);
-                    currentSelector.transform.Find("lblTotal").gameObject.SetActive(false);
-                }
-                else { 
-                    GameObject currentSelector = diceSelectors.transform.GetChild(i).gameObject;
-                    Destroy(currentSelector);
-                }
+                GameObject currentSelector = diceSelectors.transform.GetChild(i).gameObject;
+                currentSelector.name = "DiceSelector";
+                currentSelector.transform.Find("btnAddNew").gameObject.SetActive(true);
+                currentSelector.transform.Find("btnRemove").gameObject.SetActive(true);
+                currentSelector.transform.Find("lblTotal").gameObject.SetActive(false);
             }
-
-            btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
-            btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y + diceSelectionAdjustment, btnBack.transform.position.z);
+            else { 
+                GameObject currentSelector = diceSelectors.transform.GetChild(i).gameObject;
+                Destroy(currentSelector);
+                btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
+                btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y + diceSelectionAdjustment, btnBack.transform.position.z);
+                btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustment, btnQuit.transform.position.z);
+            }
         }
+
+        
         GameObject[] allDice = GameObject.FindGameObjectsWithTag("Dice");
         foreach (GameObject dice in allDice)
         {
@@ -233,6 +236,11 @@ public class GameManager : MonoBehaviour {
         btnRoll.gameObject.SetActive(true);
         btnBack.gameObject.SetActive(false);
 
+    }
+
+    void QuitClick()
+    {
+        Application.Quit();
     }
 
     GameObject FindLastSelector(GameObject diceSelectors)
