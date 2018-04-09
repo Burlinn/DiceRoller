@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
     public GameObject D2;
     public GameObject D4;
     public GameObject D6;
+    public GameObject D8;
     public GameObject D10;
     public GameObject D12;
     public GameObject D20;
@@ -43,17 +44,8 @@ public class GameManager : MonoBehaviour {
     {
         //yield return StartCoroutine(ShowIntroScreen());
         yield return StartCoroutine(ShowSelectScreen());
-        //DiceManager currentDice = new DiceManager();
-        //DiceSet currentDiceSet = new DiceSet();
-        m_DiceSets = new List<DiceSet>();
-        //currentDiceSet.m_Dice = new List<DiceManager>();
+        
 
-        //currentDice = SetDiceType(currentDice, 4);
-        //currentDice.RandomizeDice();
-        //currentDice.m_Instance.transform.position = new Vector3(0, 10, 0);
-        //currentDiceSet.m_Dice.Add(currentDice);
-        //currentDiceSet.modifier = 2;
-        //m_DiceSets.Add(currentDiceSet);
     }
 
     private IEnumerator ShowIntroScreen()
@@ -132,7 +124,7 @@ public class GameManager : MonoBehaviour {
         int currentModifier = 0;
         int currentDiceType = 0;
         int selectedDiceTypeValue = 0;
-
+        m_DiceSets = new List<DiceSet>();
         for (int i = 0; i < diceSelectors.transform.childCount; i++)
         {
             GameObject diceSelector = diceSelectors.transform.GetChild(i).gameObject;
@@ -141,16 +133,24 @@ public class GameManager : MonoBehaviour {
             GameObject txtDiceCount = diceSelector.transform.Find("txtDiceCount").gameObject;
             GameObject txtModifier = diceSelector.transform.Find("txtModifier").gameObject;
             GameObject ddlDiceSelector = diceSelector.transform.Find("ddlDiceSelector").gameObject;
-
             
-
-            Text maybe = txtDiceCount.transform.Find("Text").GetComponent<Text>();
-
-
+            if (txtDiceCount.transform.Find("Text").GetComponent<Text>().text == "")
+            {
+                currentDiceCount = 1;
+            }
+            else
+            {
+                currentDiceCount = Convert.ToInt32(txtDiceCount.transform.Find("Text").GetComponent<Text>().text);
+            }
+            if (txtModifier.transform.Find("Text").GetComponent<Text>().text == "")
+            {
+                currentModifier = 0;
+            }
+            else
+            {
+                currentModifier = Convert.ToInt32(txtModifier.transform.Find("Text").GetComponent<Text>().text);
+            }
             
-
-            currentDiceCount = Convert.ToInt32(txtDiceCount.transform.Find("Text").GetComponent<Text>().text);
-            currentModifier = Convert.ToInt32(txtModifier.transform.Find("Text").GetComponent<Text>().text);
             selectedDiceTypeValue = Convert.ToInt32(ddlDiceSelector.GetComponent<Dropdown>().value);
             currentDiceType = Convert.ToInt32(ddlDiceSelector.GetComponent<Dropdown>().options[selectedDiceTypeValue].text);
 
@@ -166,20 +166,20 @@ public class GameManager : MonoBehaviour {
                 int zCoordinate = 0;
                 if (j > currentDiceCount / 2)
                 {
-                    xCoordinate = -1 * (j + 1);
+                    xCoordinate = -1 * (j + 1) + 2;
                 }
                 else
                 {
-                    xCoordinate = (j + 1);
+                    xCoordinate = (j + 1) + 2;
                 }
 
                 if (i > diceSelectors.transform.childCount / 2)
                 {
-                    zCoordinate = -1 * (i + 1);
+                    zCoordinate = -1 * (i + 1) + 2;
                 }
                 else
                 {
-                    zCoordinate = (i + 1);
+                    zCoordinate = (i + 1) + 2;
                 }
                 
 
@@ -209,6 +209,21 @@ public class GameManager : MonoBehaviour {
                 break;
             case 4:
                 dice.m_Instance = GameObject.Instantiate(D4);
+                break;
+            case 6:
+                dice.m_Instance = GameObject.Instantiate(D6);
+                break;
+            case 8:
+                dice.m_Instance = GameObject.Instantiate(D8);
+                break;
+            case 10:
+                dice.m_Instance = GameObject.Instantiate(D10);
+                break;
+            case 12:
+                dice.m_Instance = GameObject.Instantiate(D12);
+                break;
+            case 20:
+                dice.m_Instance = GameObject.Instantiate(D20);
                 break;
         }
         return dice;

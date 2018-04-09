@@ -81,12 +81,6 @@
     <Compile Include="Assets\Scripts\Camera\CameraControl.cs" />
     <Compile Include="Assets\Scripts\Managers\DiceManager.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
-    <Compile Include="Assets\Scripts\Managers\GameManager_TANK.cs" />
-    <Compile Include="Assets\Scripts\Managers\TankManager.cs" />
-    <Compile Include="Assets\Scripts\Shell\ShellExplosion.cs" />
-    <Compile Include="Assets\Scripts\Tank\TankHealth.cs" />
-    <Compile Include="Assets\Scripts\Tank\TankMovement.cs" />
-    <Compile Include="Assets\Scripts\Tank\TankShooting.cs" />
     <Compile Include="Assets\Scripts\UI\UIDirectionControl.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
