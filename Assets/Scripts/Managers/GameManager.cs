@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour {
 
         if (diceSelectors.transform.childCount < 6) {
             diceSelector = GameObject.Instantiate(DiceSelector);
-            diceSelector.transform.parent = diceSelectors.transform;
+            diceSelector.transform.SetParent(diceSelectors.transform, false);
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y - diceSelectionAdjustment, btnRoll.transform.position.z);
             btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y - diceSelectionAdjustment, btnBack.transform.position.z);
             btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y - diceSelectionAdjustment, btnQuit.transform.position.z);

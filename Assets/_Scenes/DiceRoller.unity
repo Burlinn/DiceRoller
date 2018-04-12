@@ -813,11 +813,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 2.49
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -973,11 +973,11 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 2
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -1066,7 +1066,7 @@ MonoBehaviour:
   D12: {fileID: 1274575914802440, guid: 56107bbb559997349b835604100ab4fd, type: 2}
   D20: {fileID: 1743783714781668, guid: cda6ead1333cb874bb30b2f79414a888, type: 2}
   D100: {fileID: 0}
-  diceSelectionAdjustment: 40
+  diceSelectionAdjustment: 70
 --- !u!4 &985957105
 Transform:
   m_ObjectHideFlags: 0
