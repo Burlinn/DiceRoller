@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour {
     public GameObject D20;
     public GameObject D100;
     public int diceSelectionAdjustment;
+    public int rollSpeed;
 
     private WaitForSeconds m_StartWait;
     private List<DiceSet> m_DiceSets;
@@ -195,6 +196,7 @@ public class GameManager : MonoBehaviour {
                 
 
                 currentDice.m_Instance.transform.position = new Vector3(xCoordinate, 10, zCoordinate);
+                currentDice.m_Instance.transform.GetComponent<Rigidbody>().AddForce(0, 0, rollSpeed);
                 currentDiceSet.m_Dice.Add(currentDice);
             }
             m_DiceSets.Add(currentDiceSet);

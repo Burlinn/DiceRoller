@@ -1067,6 +1067,7 @@ MonoBehaviour:
   D20: {fileID: 1743783714781668, guid: cda6ead1333cb874bb30b2f79414a888, type: 2}
   D100: {fileID: 0}
   diceSelectionAdjustment: 70
+  rollSpeed: 0
 --- !u!4 &985957105
 Transform:
   m_ObjectHideFlags: 0
