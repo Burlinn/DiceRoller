@@ -136,9 +136,16 @@ public class GameManager : MonoBehaviour {
         int currentModifier = 0;
         int currentDiceType = 0;
         int selectedDiceTypeValue = 0;
+        int yCoordinate = 10;
+        int xCoordinate = 0;
+        int zCoordinate = 0;
+        bool isPositive = true;
+
+        zCoordinate = diceSelectors.transform.childCount;
         m_DiceSets = new List<DiceSet>();
         for (int i = 0; i < diceSelectors.transform.childCount; i++)
         {
+            yCoordinate = 10;
             GameObject diceSelector = diceSelectors.transform.GetChild(i).gameObject;
             DiceSet currentDiceSet = new DiceSet();
 
@@ -168,37 +175,62 @@ public class GameManager : MonoBehaviour {
 
             currentDiceSet.m_Dice = new List<DiceManager>();
             currentDiceSet.modifier = currentModifier;
+            if (currentDiceCount < 10)
+            {
+                xCoordinate = -1 * (currentDiceCount / 2);
+            }
+            else
+            {
+                xCoordinate = -5;
+            }
+            
 
-            for(int j = 0; j < currentDiceCount; j++)
+            for (int j = 0; j < currentDiceCount; j++)
             {
                 DiceManager currentDice = new DiceManager();
                 currentDice = SetDiceType(currentDice, currentDiceType);
                 currentDice.RandomizeDice();
-                int xCoordinate = 0;
-                int zCoordinate = 0;
-                if (j > currentDiceCount / 2)
-                {
-                    xCoordinate = -1 * (j + 1) + 2;
-                }
-                else
-                {
-                    xCoordinate = (j + 1) + 2;
-                }
-
-                if (i > diceSelectors.transform.childCount / 2)
-                {
-                    zCoordinate = -1 * (i + 1) + 2;
-                }
-                else
-                {
-                    zCoordinate = (i + 1) + 2;
-                }
                 
 
-                currentDice.m_Instance.transform.position = new Vector3(xCoordinate, 10, zCoordinate);
+                //if (i > diceSelectors.transform.childCount / 2)
+                //{
+                //    zCoordinate = -1 * (i + 1) + 2;
+                //}
+                //else
+                //{
+                //    zCoordinate = (i + 1) + 2;
+                //}
+
+
+                currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
+
                 currentDice.m_Instance.transform.GetComponent<Rigidbody>().AddForce(0, 0, rollSpeed);
                 currentDiceSet.m_Dice.Add(currentDice);
+                if (isPositive)
+                {
+                    xCoordinate += 1;
+                }
+                else
+                {
+                    xCoordinate -= 1;
+                }
+
+
+                if (xCoordinate >= 9)
+                {
+                    xCoordinate -= 1;
+                    yCoordinate += 4;
+                    isPositive = false;
+                }
+                if(xCoordinate <= -9)
+                {
+                    xCoordinate += 1;
+                    yCoordinate += 4;
+                    isPositive = true;
+                }
+                
             }
+            zCoordinate -= 2;
             m_DiceSets.Add(currentDiceSet);
         }
         selectionScreen.SetActive(false);
