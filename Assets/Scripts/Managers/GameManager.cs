@@ -10,8 +10,12 @@ public class GameManager : MonoBehaviour {
     public float m_StartDelay = .01f;
     public CameraControl m_CameraControl;
     public Canvas m_MessageCanvas;
+    public Button btnIntroRollDice;
+    public Button btnRollD20;
+    public Button btnFlipCoin;
     public Button btnRoll;
-    public Button btnBack;
+    public Button btnSelectBack;
+    public Button btnResultsBack;
     public Button btnQuit;
     public GameObject DiceSelector;
     public GameObject D2;
@@ -40,24 +44,26 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         m_StartWait = new WaitForSeconds(m_StartDelay);
-        StartCoroutine(GameLoop());
+        GameLoop();
     }
 
-    private IEnumerator GameLoop()
+    private void GameLoop()
     {
-        yield return StartCoroutine(ShowIntroScreen());
-        ShowSelectScreen();
-        
+        ShowIntroScreen();
+
 
     }
 
-    private IEnumerator ShowIntroScreen()
+    private void ShowIntroScreen()
     {
         GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
         GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
+        btnIntroRollDice.GetComponent<Button>().onClick.AddListener(delegate { ShowSelectScreen(); });
+        btnRollD20.GetComponent<Button>().onClick.AddListener(delegate { RollD20Click(); });
+        btnFlipCoin.GetComponent<Button>().onClick.AddListener(delegate { FlipCoinClick(); });
+        btnQuit.GetComponent<Button>().onClick.AddListener(delegate { QuitClick(); });
         introScreen.SetActive(true);
         selectionScreen.SetActive(false);
-        yield return m_StartWait;
     }
 
     private void ShowSelectScreen()
@@ -74,13 +80,15 @@ public class GameManager : MonoBehaviour {
         btnAddNew.GetComponent<Button>().onClick.AddListener(delegate { AddNewClick(); });
         btnRemove.GetComponent<Button>().onClick.AddListener(delegate { RemoveClick(0); });
         btnRoll.GetComponent<Button>().onClick.AddListener(delegate { RollClick(); });
-        btnBack.GetComponent<Button>().onClick.AddListener(delegate { BackClick(); });
-        btnQuit.GetComponent<Button>().onClick.AddListener(delegate { QuitClick(); });
+        btnResultsBack.GetComponent<Button>().onClick.AddListener(delegate { ResultsBackClick(); });
+        btnSelectBack.GetComponent<Button>().onClick.AddListener(delegate { SelectBackClick(); });
         diceSelector.name = "DiceSelector1";
-        btnBack.gameObject.SetActive(false);
-        
+        btnResultsBack.gameObject.SetActive(false);
+        btnSelectBack.gameObject.SetActive(true);
+
     }
 
+    
 
     void AddNewClick()
     {
@@ -95,7 +103,7 @@ public class GameManager : MonoBehaviour {
             diceSelector = GameObject.Instantiate(DiceSelector);
             diceSelector.transform.SetParent(diceSelectors.transform, false);
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y - diceSelectionAdjustment, btnRoll.transform.position.z);
-            btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y - diceSelectionAdjustment, btnBack.transform.position.z);
+            btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y - diceSelectionAdjustment, btnResultsBack.transform.position.z);
             btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y - diceSelectionAdjustment, btnQuit.transform.position.z);
             diceSelector.transform.position = new Vector3(lastSelector.transform.position.x, lastSelector.transform.position.y - diceSelectionAdjustment, lastSelector.transform.position.z);
             btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
@@ -123,7 +131,7 @@ public class GameManager : MonoBehaviour {
             }
 
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
-            btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y + diceSelectionAdjustment, btnBack.transform.position.z);
+            btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y + diceSelectionAdjustment, btnResultsBack.transform.position.z);
             btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustment, btnQuit.transform.position.z);
         }
     }
@@ -225,7 +233,77 @@ public class GameManager : MonoBehaviour {
         selectionScreen.SetActive(false);
     }
 
-    void BackClick()
+    private void RollD20Click()
+    {
+        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
+        GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
+        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
+        int currentDiceType = 20;
+        int yCoordinate = 10;
+        int xCoordinate = 0;
+        int zCoordinate = 0;
+
+        m_DiceSets = new List<DiceSet>();
+
+        DiceSet currentDiceSet = new DiceSet();
+
+
+        currentDiceSet.m_Dice = new List<DiceManager>();
+
+
+        DiceManager currentDice = new DiceManager();
+        currentDice = SetDiceType(currentDice, currentDiceType);
+        currentDice.RandomizeDice();
+
+        currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
+
+        currentDice.m_Instance.transform.GetComponent<Rigidbody>().AddForce(0, 0, rollSpeed);
+        currentDiceSet.m_Dice.Add(currentDice);
+        currentDiceSet.modifier = 0;
+
+            
+        m_DiceSets.Add(currentDiceSet);
+
+        selectionScreen.SetActive(false);
+        introScreen.SetActive(false);
+    }
+
+    private void FlipCoinClick()
+    {
+        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
+        GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
+        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
+        int currentDiceType = 2;
+        int yCoordinate = 10;
+        int xCoordinate = 0;
+        int zCoordinate = 0;
+
+        m_DiceSets = new List<DiceSet>();
+
+        DiceSet currentDiceSet = new DiceSet();
+
+
+        currentDiceSet.m_Dice = new List<DiceManager>();
+
+
+        DiceManager currentDice = new DiceManager();
+        currentDice = SetDiceType(currentDice, currentDiceType);
+        currentDice.RandomizeDice();
+
+        currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
+
+        currentDice.m_Instance.transform.GetComponent<Rigidbody>().AddForce(0, 0, rollSpeed);
+        currentDiceSet.m_Dice.Add(currentDice);
+        currentDiceSet.modifier = 0;
+
+
+        m_DiceSets.Add(currentDiceSet);
+
+        selectionScreen.SetActive(false);
+        introScreen.SetActive(false);
+    }
+
+    void ResultsBackClick()
     {
         m_DiceSets = new List<DiceSet>();
         GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
@@ -245,11 +323,10 @@ public class GameManager : MonoBehaviour {
                 GameObject currentSelector = diceSelectors.transform.GetChild(i).gameObject;
                 Destroy(currentSelector);
                 btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
-                btnBack.transform.position = new Vector3(btnBack.transform.position.x, btnBack.transform.position.y + diceSelectionAdjustment, btnBack.transform.position.z);
+                btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y + diceSelectionAdjustment, btnResultsBack.transform.position.z);
                 btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustment, btnQuit.transform.position.z);
             }
         }
-
         
         GameObject[] allDice = GameObject.FindGameObjectsWithTag("Dice");
         foreach (GameObject dice in allDice)
@@ -257,9 +334,17 @@ public class GameManager : MonoBehaviour {
             Destroy(dice);
         }
         btnRoll.gameObject.SetActive(true);
-        btnBack.gameObject.SetActive(false);
+        btnResultsBack.gameObject.SetActive(false);
+        btnSelectBack.gameObject.SetActive(true);
 
     }
+
+    void SelectBackClick()
+    {
+        ShowIntroScreen();
+
+    }
+
 
     void QuitClick()
     {
@@ -312,7 +397,7 @@ public class GameManager : MonoBehaviour {
             if (doneRolling == true)
             {
                 GetTotals();
-                ReShowSelectScreen();
+                ShowResultsScreen();
             }
         }
     }
@@ -340,7 +425,7 @@ public class GameManager : MonoBehaviour {
         return noMovement;
     }
 
-    void ReShowSelectScreen()
+    void ShowResultsScreen()
     {
         
         GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
@@ -359,9 +444,10 @@ public class GameManager : MonoBehaviour {
             diceSelector.transform.Find("lblTotal").GetComponent<Text>().text = "Total: " + currentDiceSet.total;
 
         }
-        
-        btnBack.gameObject.SetActive(true);
+
+        btnResultsBack.gameObject.SetActive(true);
         btnRoll.gameObject.SetActive(false);
+        btnSelectBack.gameObject.SetActive(false);
 
     }
 
