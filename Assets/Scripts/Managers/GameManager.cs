@@ -190,17 +190,6 @@ public class GameManager : MonoBehaviour {
                 DiceManager currentDice = new DiceManager();
                 currentDice = SetDiceType(currentDice, currentDiceType);
                 currentDice.RandomizeDice();
-                
-
-                //if (i > diceSelectors.transform.childCount / 2)
-                //{
-                //    zCoordinate = -1 * (i + 1) + 2;
-                //}
-                //else
-                //{
-                //    zCoordinate = (i + 1) + 2;
-                //}
-
 
                 currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
 
