@@ -27,8 +27,13 @@ public class DiceManager : MonoBehaviour {
 
     public void RandomizeDice()
     {
-        var a = 1;
-        m_Instance.transform.Rotate(UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f));
+        if (UnityEngine.Random.Range(0.0f, 10f) == 1)
+        {
+            m_Instance.transform.Rotate(UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f));
+        }
+        else { 
+            m_Instance.transform.rotation = Quaternion.Euler(UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f));
+        }
     }
 
     public int GetValue()

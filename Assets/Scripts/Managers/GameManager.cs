@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using System.IO;
 
 public class GameManager : MonoBehaviour {
 
@@ -41,14 +42,27 @@ public class GameManager : MonoBehaviour {
         public int total;
     }
 
+
+
+
     // Use this for initialization
     void Start () {
+        //Test();
+
         m_StartWait = new WaitForSeconds(m_StartDelay);
         GameLoop();
     }
 
     private void GameLoop()
     {
+        btnIntroRollDice.GetComponent<Button>().onClick.AddListener(delegate { ShowSelectScreen(); });
+        btnRollD20.GetComponent<Button>().onClick.AddListener(delegate { RollD20Click(); });
+        btnFlipCoin.GetComponent<Button>().onClick.AddListener(delegate { FlipCoinClick(); });
+        btnQuit.GetComponent<Button>().onClick.AddListener(delegate { QuitClick(); });
+        btnRoll.GetComponent<Button>().onClick.AddListener(delegate { RollClick(); });
+        btnResultsBack.GetComponent<Button>().onClick.AddListener(delegate { ResultsBackClick(); });
+        btnSelectBack.GetComponent<Button>().onClick.AddListener(delegate { SelectBackClick(); });
+
         ShowIntroScreen();
 
 
@@ -58,10 +72,7 @@ public class GameManager : MonoBehaviour {
     {
         GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
         GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        btnIntroRollDice.GetComponent<Button>().onClick.AddListener(delegate { ShowSelectScreen(); });
-        btnRollD20.GetComponent<Button>().onClick.AddListener(delegate { RollD20Click(); });
-        btnFlipCoin.GetComponent<Button>().onClick.AddListener(delegate { FlipCoinClick(); });
-        btnQuit.GetComponent<Button>().onClick.AddListener(delegate { QuitClick(); });
+        
         introScreen.SetActive(true);
         selectionScreen.SetActive(false);
     }
@@ -79,9 +90,6 @@ public class GameManager : MonoBehaviour {
         diceSelector.transform.Find("lblTotal").gameObject.SetActive(false);
         btnAddNew.GetComponent<Button>().onClick.AddListener(delegate { AddNewClick(); });
         btnRemove.GetComponent<Button>().onClick.AddListener(delegate { RemoveClick(0); });
-        btnRoll.GetComponent<Button>().onClick.AddListener(delegate { RollClick(); });
-        btnResultsBack.GetComponent<Button>().onClick.AddListener(delegate { ResultsBackClick(); });
-        btnSelectBack.GetComponent<Button>().onClick.AddListener(delegate { SelectBackClick(); });
         diceSelector.name = "DiceSelector1";
         btnResultsBack.gameObject.SetActive(false);
         btnSelectBack.gameObject.SetActive(true);
@@ -104,6 +112,7 @@ public class GameManager : MonoBehaviour {
             diceSelector.transform.SetParent(diceSelectors.transform, false);
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y - diceSelectionAdjustment, btnRoll.transform.position.z);
             btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y - diceSelectionAdjustment, btnResultsBack.transform.position.z);
+            btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y - diceSelectionAdjustment, btnSelectBack.transform.position.z);
             btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y - diceSelectionAdjustment, btnQuit.transform.position.z);
             diceSelector.transform.position = new Vector3(lastSelector.transform.position.x, lastSelector.transform.position.y - diceSelectionAdjustment, lastSelector.transform.position.z);
             btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
@@ -132,6 +141,7 @@ public class GameManager : MonoBehaviour {
 
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
             btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y + diceSelectionAdjustment, btnResultsBack.transform.position.z);
+            btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y + diceSelectionAdjustment, btnSelectBack.transform.position.z);
             btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustment, btnQuit.transform.position.z);
         }
     }
@@ -324,6 +334,7 @@ public class GameManager : MonoBehaviour {
                 Destroy(currentSelector);
                 btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
                 btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y + diceSelectionAdjustment, btnResultsBack.transform.position.z);
+                btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y + diceSelectionAdjustment, btnSelectBack.transform.position.z);
                 btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustment, btnQuit.transform.position.z);
             }
         }
@@ -468,4 +479,43 @@ public class GameManager : MonoBehaviour {
             m_DiceSets[i] = currentDiceSet;
         }
     }
+
+    void Test()
+    {
+        int currentDiceType = 20;
+        int currentValue = 0;
+        var testItems = new Dictionary<int, int>();
+
+        for(int i = 1; i <= 20; i++)
+        {
+            testItems[i] = 0;
+        }
+
+        for (int i = 0; i < 50000; i++)
+        {
+          
+            DiceManager currentDice = new DiceManager();
+            currentDice = SetDiceType(currentDice, currentDiceType);
+            currentDice.RandomizeDice();
+
+            currentValue = currentDice.GetValue();
+
+            testItems[currentValue] = testItems[currentValue] + 1;
+
+            Destroy(currentDice);
+            
+        }
+        string path = "Assets/Resources/TestLog.txt";
+
+        //Write some text to the test.txt file
+        StreamWriter writer = new StreamWriter(path, true);
+        writer.WriteLine("");
+        for (int i = 1; i <= 20; i++)
+        {
+            writer.WriteLine(i + ":" + testItems[i]);
+        }
+        writer.Close();
+    }
+
+
 }
