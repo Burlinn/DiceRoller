@@ -1777,7 +1777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdebc4776b502884a9bb932b95b5a154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_StartDelay: 3
+  m_StartDelay: 2
   m_CameraControl: {fileID: 0}
   m_MessageCanvas: {fileID: 974809126}
   btnIntroRollDice: {fileID: 450053711}

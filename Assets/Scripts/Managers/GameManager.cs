@@ -8,7 +8,7 @@ using System.IO;
 
 public class GameManager : MonoBehaviour {
 
-    public float m_StartDelay = .01f;
+    public float m_StartDelay = 3.0f;
     public CameraControl m_CameraControl;
     public Canvas m_MessageCanvas;
     public Button btnIntroRollDice;
@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour {
     private List<DiceSet> m_DiceSets;
     private bool doneRolling = false;
     private int diceSelectorsTotal = 1;
+    private bool rollingStart = false;
 
     public struct DiceSet
     {
@@ -241,6 +242,8 @@ public class GameManager : MonoBehaviour {
             m_DiceSets.Add(currentDiceSet);
         }
         selectionScreen.SetActive(false);
+        StartCoroutine(StartRoll());
+
     }
 
     private void RollD20Click()
@@ -276,10 +279,12 @@ public class GameManager : MonoBehaviour {
 
         selectionScreen.SetActive(false);
         introScreen.SetActive(false);
+        StartCoroutine(StartRoll());
     }
 
     private void FlipCoinClick()
     {
+        
         GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
         GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
         GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
@@ -311,6 +316,15 @@ public class GameManager : MonoBehaviour {
 
         selectionScreen.SetActive(false);
         introScreen.SetActive(false);
+        StartCoroutine(StartRoll());
+
+    }
+
+    IEnumerator StartRoll()
+    {
+        rollingStart = true;
+        yield return new WaitForSeconds(m_StartDelay);
+        rollingStart = false;
     }
 
     void ResultsBackClick()
@@ -403,12 +417,16 @@ public class GameManager : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         if(m_DiceSets != null) { 
-            doneRolling = IsDoneRolling();
-      
-            if (doneRolling == true)
+            if(rollingStart == false)
             {
-                GetTotals();
-                ShowResultsScreen();
+            
+                doneRolling = IsDoneRolling();
+      
+                if (doneRolling == true)
+                {
+                    GetTotals();
+                    ShowResultsScreen();
+                }
             }
         }
     }
@@ -485,24 +503,28 @@ public class GameManager : MonoBehaviour {
         int currentDiceType = 20;
         int currentValue = 0;
         var testItems = new Dictionary<int, int>();
+        DiceManager currentDice = new DiceManager();
+        currentDice = SetDiceType(currentDice, currentDiceType);
 
-        for(int i = 1; i <= 20; i++)
+        for (int i = 1; i <= 20; i++)
         {
             testItems[i] = 0;
         }
 
-        for (int i = 0; i < 50000; i++)
+        for (int i = 0; i < 1000000; i++)
         {
           
-            DiceManager currentDice = new DiceManager();
-            currentDice = SetDiceType(currentDice, currentDiceType);
+            
             currentDice.RandomizeDice();
 
             currentValue = currentDice.GetValue();
 
-            testItems[currentValue] = testItems[currentValue] + 1;
+            currentDice.UnRandomizeDice();
 
-            Destroy(currentDice);
+            var resetValue = currentDice.GetValue();
+
+            testItems[currentValue] = testItems[currentValue] + 1;
+            
             
         }
         string path = "Assets/Resources/TestLog.txt";

@@ -19,7 +19,6 @@ public class DiceManager : MonoBehaviour {
 
 
 
-
     // Use this for initialization
     void Start() {
 
@@ -27,13 +26,29 @@ public class DiceManager : MonoBehaviour {
 
     public void RandomizeDice()
     {
-        if (UnityEngine.Random.Range(0.0f, 10f) == 1)
-        {
-            m_Instance.transform.Rotate(UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f));
-        }
-        else { 
-            m_Instance.transform.rotation = Quaternion.Euler(UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f), UnityEngine.Random.Range(0.0f, 360.0f));
-        }
+        m_Instance.transform.rotation = UniformRandomRotation();
+    }
+
+    Quaternion UniformRandomRotation()
+    {
+        float x0 = UnityEngine.Random.value;
+        float theta1 = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+        float theta2 = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+        // Make this theta2 in the range (0, PI * 1) if you want w > 0
+
+        float r1 = Mathf.Sqrt(1f - x0);
+        float r2 = Mathf.Sqrt(x0);
+
+        return new Quaternion(
+            Mathf.Cos(theta2) * r2,
+            Mathf.Sin(theta1) * r1,
+            Mathf.Cos(theta1) * r1,
+            Mathf.Sin(theta2) * r2);
+    }
+
+    public void UnRandomizeDice()
+    {
+        m_Instance.transform.rotation = Quaternion.Euler(270, 270, 270);
     }
 
     public int GetValue()
