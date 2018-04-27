@@ -11,13 +11,6 @@ public class GameManager : MonoBehaviour {
     public float m_StartDelay = 3.0f;
     public CameraControl m_CameraControl;
     public Canvas m_MessageCanvas;
-    public Button btnIntroRollDice;
-    public Button btnRollD20;
-    public Button btnFlipCoin;
-    public Button btnRoll;
-    public Button btnSelectBack;
-    public Button btnResultsBack;
-    public Button btnQuit;
     public GameObject DiceSelector;
     public GameObject D2;
     public GameObject D4;
@@ -30,184 +23,63 @@ public class GameManager : MonoBehaviour {
     public int diceSelectionAdjustment;
     public int rollSpeed;
 
-    private WaitForSeconds m_StartWait;
-    private List<DiceSet> m_DiceSets;
-    private bool doneRolling = false;
-    private int diceSelectorsTotal = 1;
-    private bool rollingStart = false;
-
-    public struct DiceSet
-    {
-        public List<DiceManager> m_Dice;
-        public int modifier;
-        public int total;
-    }
-
+    private WaitForSeconds _startWait;
+    private List<DiceSet> _diceSets;
+    private bool _doneRolling = false;
+    private int _diceSelectorsTotal = 1;
+    private bool _rollingStart = false;
 
 
 
     // Use this for initialization
     void Start () {
         //Test();
-
-        m_StartWait = new WaitForSeconds(m_StartDelay);
+        _startWait = new WaitForSeconds(m_StartDelay);
         GameLoop();
     }
 
     private void GameLoop()
     {
-        btnIntroRollDice.GetComponent<Button>().onClick.AddListener(delegate { ShowSelectScreen(); });
-        btnRollD20.GetComponent<Button>().onClick.AddListener(delegate { RollD20Click(); });
-        btnFlipCoin.GetComponent<Button>().onClick.AddListener(delegate { FlipCoinClick(); });
-        btnQuit.GetComponent<Button>().onClick.AddListener(delegate { QuitClick(); });
-        btnRoll.GetComponent<Button>().onClick.AddListener(delegate { RollClick(); });
-        btnResultsBack.GetComponent<Button>().onClick.AddListener(delegate { ResultsBackClick(); });
-        btnSelectBack.GetComponent<Button>().onClick.AddListener(delegate { SelectBackClick(); });
+        //canvasManager.SetUp();
 
-        ShowIntroScreen();
+        //canvasManager.ShowIntroScreen();
 
-
-    }
-
-    private void ShowIntroScreen()
-    {
-        GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
-        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        
-        introScreen.SetActive(true);
-        selectionScreen.SetActive(false);
-    }
-
-    private void ShowSelectScreen()
-    {
-        GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
-        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
-        introScreen.SetActive(false);
-        selectionScreen.SetActive(true);
-        GameObject diceSelector = diceSelectors.transform.Find("DiceSelector").gameObject;
-        GameObject btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
-        GameObject btnRemove = diceSelector.transform.Find("btnRemove").gameObject;
-        diceSelector.transform.Find("lblTotal").gameObject.SetActive(false);
-        btnAddNew.GetComponent<Button>().onClick.AddListener(delegate { AddNewClick(); });
-        btnRemove.GetComponent<Button>().onClick.AddListener(delegate { RemoveClick(0); });
-        diceSelector.name = "DiceSelector1";
-        btnResultsBack.gameObject.SetActive(false);
-        btnSelectBack.gameObject.SetActive(true);
 
     }
 
     
-
-    void AddNewClick()
+    public void RollDice(List<DiceSetInfo> diceSetInfos)
     {
-        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
-        GameObject lastSelector = FindLastSelector(diceSelectors);
-        GameObject diceSelector;
-        GameObject btnAddNew;
-        GameObject btnRemove;
-
-        if (diceSelectors.transform.childCount < 6) {
-            diceSelector = GameObject.Instantiate(DiceSelector);
-            diceSelector.transform.SetParent(diceSelectors.transform, false);
-            btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y - diceSelectionAdjustment, btnRoll.transform.position.z);
-            btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y - diceSelectionAdjustment, btnResultsBack.transform.position.z);
-            btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y - diceSelectionAdjustment, btnSelectBack.transform.position.z);
-            btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y - diceSelectionAdjustment, btnQuit.transform.position.z);
-            diceSelector.transform.position = new Vector3(lastSelector.transform.position.x, lastSelector.transform.position.y - diceSelectionAdjustment, lastSelector.transform.position.z);
-            btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
-            btnRemove = diceSelector.transform.Find("btnRemove").gameObject;
-            diceSelector.transform.Find("lblTotal").gameObject.SetActive(false);
-            btnAddNew.GetComponent<Button>().onClick.AddListener(delegate { AddNewClick(); });
-            btnRemove.GetComponent<Button>().onClick.AddListener(delegate { RemoveClick(diceSelectors.transform.childCount - 1); });
-            diceSelector.name = "DiceSelector" + diceSelectors.transform.childCount;
-        }
-    }
-    
-    void RemoveClick(int id)
-    {
-        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
-        GameObject selectorToRemove = diceSelectors.transform.GetChild(id).gameObject;
-        GameObject currentSelector;
-        if (diceSelectors.transform.childCount > 1) { 
-            Destroy(selectorToRemove);
-            for(int i = id; i < diceSelectors.transform.childCount; i++)
-            {
-                currentSelector = diceSelectors.transform.GetChild(i).gameObject;
-                currentSelector.transform.position = new Vector3(currentSelector.transform.position.x, currentSelector.transform.position.y + diceSelectionAdjustment, currentSelector.transform.position.z);
-                currentSelector.name = "DiceSelector" + i;
-            }
-
-            btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
-            btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y + diceSelectionAdjustment, btnResultsBack.transform.position.z);
-            btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y + diceSelectionAdjustment, btnSelectBack.transform.position.z);
-            btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustment, btnQuit.transform.position.z);
-        }
-    }
-
-    void RollClick()
-    {
-        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
-        int currentDiceCount = 0;
-        int currentModifier = 0;
-        int currentDiceType = 0;
-        int selectedDiceTypeValue = 0;
         int yCoordinate = 10;
         int xCoordinate = 0;
         int zCoordinate = 0;
         bool isPositive = true;
 
-        zCoordinate = diceSelectors.transform.childCount;
-        m_DiceSets = new List<DiceSet>();
-        for (int i = 0; i < diceSelectors.transform.childCount; i++)
+        zCoordinate = diceSetInfos.Count;
+        _diceSets = new List<DiceSet>();
+        for (int i = 0; i < diceSetInfos.Count; i++)
         {
             yCoordinate = 10;
-            GameObject diceSelector = diceSelectors.transform.GetChild(i).gameObject;
+            DiceSetInfo diceSetInfo = diceSetInfos[i];
             DiceSet currentDiceSet = new DiceSet();
-
-            GameObject txtDiceCount = diceSelector.transform.Find("txtDiceCount").gameObject;
-            GameObject txtModifier = diceSelector.transform.Find("txtModifier").gameObject;
-            GameObject ddlDiceSelector = diceSelector.transform.Find("ddlDiceSelector").gameObject;
-            
-            if (txtDiceCount.transform.Find("Text").GetComponent<Text>().text == "")
-            {
-                currentDiceCount = 1;
-            }
-            else
-            {
-                currentDiceCount = Convert.ToInt32(txtDiceCount.transform.Find("Text").GetComponent<Text>().text);
-            }
-            if (txtModifier.transform.Find("Text").GetComponent<Text>().text == "")
-            {
-                currentModifier = 0;
-            }
-            else
-            {
-                currentModifier = Convert.ToInt32(txtModifier.transform.Find("Text").GetComponent<Text>().text);
-            }
-            
-            selectedDiceTypeValue = Convert.ToInt32(ddlDiceSelector.GetComponent<Dropdown>().value);
-            currentDiceType = Convert.ToInt32(ddlDiceSelector.GetComponent<Dropdown>().options[selectedDiceTypeValue].text);
+           
 
             currentDiceSet.m_Dice = new List<DiceManager>();
-            currentDiceSet.modifier = currentModifier;
-            if (currentDiceCount < 10)
+            currentDiceSet.modifier = diceSetInfo.diceModifier;
+            if (diceSetInfo.numberOfDice < 10)
             {
-                xCoordinate = -1 * (currentDiceCount / 2);
+                xCoordinate = -1 * (diceSetInfo.numberOfDice / 2);
             }
             else
             {
                 xCoordinate = -5;
             }
-            
 
-            for (int j = 0; j < currentDiceCount; j++)
+
+            for (int j = 0; j < diceSetInfo.numberOfDice; j++)
             {
                 DiceManager currentDice = new DiceManager();
-                currentDice = SetDiceType(currentDice, currentDiceType);
+                currentDice = SetDiceType(currentDice, diceSetInfo.diceType);
                 currentDice.RandomizeDice();
 
                 currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
@@ -230,159 +102,47 @@ public class GameManager : MonoBehaviour {
                     yCoordinate += 4;
                     isPositive = false;
                 }
-                if(xCoordinate <= -9)
+                if (xCoordinate <= -9)
                 {
                     xCoordinate += 1;
                     yCoordinate += 4;
                     isPositive = true;
                 }
-                
+
             }
             zCoordinate -= 2;
-            m_DiceSets.Add(currentDiceSet);
+            _diceSets.Add(currentDiceSet);
         }
-        selectionScreen.SetActive(false);
         StartCoroutine(StartRoll());
 
     }
 
-    private void RollD20Click()
+
+    public List<DiceSet> GetDiceSets()
     {
-        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
-        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
-        int currentDiceType = 20;
-        int yCoordinate = 10;
-        int xCoordinate = 0;
-        int zCoordinate = 0;
-
-        m_DiceSets = new List<DiceSet>();
-
-        DiceSet currentDiceSet = new DiceSet();
-
-
-        currentDiceSet.m_Dice = new List<DiceManager>();
-
-
-        DiceManager currentDice = new DiceManager();
-        currentDice = SetDiceType(currentDice, currentDiceType);
-        currentDice.RandomizeDice();
-
-        currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
-
-        currentDice.m_Instance.transform.GetComponent<Rigidbody>().AddForce(0, 0, rollSpeed);
-        currentDiceSet.m_Dice.Add(currentDice);
-        currentDiceSet.modifier = 0;
-
-            
-        m_DiceSets.Add(currentDiceSet);
-
-        selectionScreen.SetActive(false);
-        introScreen.SetActive(false);
-        StartCoroutine(StartRoll());
-    }
-
-    private void FlipCoinClick()
-    {
-        
-        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
-        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
-        int currentDiceType = 2;
-        int yCoordinate = 10;
-        int xCoordinate = 0;
-        int zCoordinate = 0;
-
-        m_DiceSets = new List<DiceSet>();
-
-        DiceSet currentDiceSet = new DiceSet();
-
-
-        currentDiceSet.m_Dice = new List<DiceManager>();
-
-
-        DiceManager currentDice = new DiceManager();
-        currentDice = SetDiceType(currentDice, currentDiceType);
-        currentDice.RandomizeDice();
-
-        currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
-
-        currentDice.m_Instance.transform.GetComponent<Rigidbody>().AddForce(0, 0, rollSpeed);
-        currentDiceSet.m_Dice.Add(currentDice);
-        currentDiceSet.modifier = 0;
-
-
-        m_DiceSets.Add(currentDiceSet);
-
-        selectionScreen.SetActive(false);
-        introScreen.SetActive(false);
-        StartCoroutine(StartRoll());
-
+        return _diceSets;
     }
 
     IEnumerator StartRoll()
     {
-        rollingStart = true;
+        _rollingStart = true;
         yield return new WaitForSeconds(m_StartDelay);
-        rollingStart = false;
+        _rollingStart = false;
     }
 
-    void ResultsBackClick()
+    public void DestroyDice()
     {
-        m_DiceSets = new List<DiceSet>();
-        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
-        
-        for (int i = 0; i < diceSelectors.transform.childCount; i++)
-        {
-            if (i == 0)
-            {
-                GameObject currentSelector = diceSelectors.transform.GetChild(i).gameObject;
-                currentSelector.name = "DiceSelector";
-                currentSelector.transform.Find("btnAddNew").gameObject.SetActive(true);
-                currentSelector.transform.Find("btnRemove").gameObject.SetActive(true);
-                currentSelector.transform.Find("lblTotal").gameObject.SetActive(false);
-            }
-            else { 
-                GameObject currentSelector = diceSelectors.transform.GetChild(i).gameObject;
-                Destroy(currentSelector);
-                btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustment, btnRoll.transform.position.z);
-                btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y + diceSelectionAdjustment, btnResultsBack.transform.position.z);
-                btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y + diceSelectionAdjustment, btnSelectBack.transform.position.z);
-                btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustment, btnQuit.transform.position.z);
-            }
-        }
-        
+        _diceSets.Clear();
         GameObject[] allDice = GameObject.FindGameObjectsWithTag("Dice");
         foreach (GameObject dice in allDice)
         {
             Destroy(dice);
         }
-        btnRoll.gameObject.SetActive(true);
-        btnResultsBack.gameObject.SetActive(false);
-        btnSelectBack.gameObject.SetActive(true);
+
 
     }
 
-    void SelectBackClick()
-    {
-        ShowIntroScreen();
-
-    }
-
-
-    void QuitClick()
-    {
-        Application.Quit();
-    }
-
-    GameObject FindLastSelector(GameObject diceSelectors)
-    {
-        GameObject lastSelector;
-        lastSelector = diceSelectors.transform.GetChild(diceSelectors.transform.childCount - 1).gameObject;
-
-        return lastSelector;
-    }
+    
 
 
     public DiceManager SetDiceType(DiceManager dice, int diceType)
@@ -416,16 +176,15 @@ public class GameManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if(m_DiceSets != null) { 
-            if(rollingStart == false)
+        if(_diceSets != null) { 
+            if(_rollingStart == false)
             {
             
-                doneRolling = IsDoneRolling();
+                _doneRolling = IsDoneRolling();
       
-                if (doneRolling == true)
+                if (_doneRolling == true)
                 {
                     GetTotals();
-                    ShowResultsScreen();
                 }
             }
         }
@@ -434,9 +193,9 @@ public class GameManager : MonoBehaviour {
     bool IsDoneRolling()
     {
         bool noMovement = false;
-        for (int i = 0; i < m_DiceSets.Count; i++)
+        for (int i = 0; i < _diceSets.Count; i++)
         {
-            DiceSet currentDiceSet = m_DiceSets[i];
+            DiceSet currentDiceSet = _diceSets[i];
             for (int j = 0; j < currentDiceSet.m_Dice.Count; j++)
             {
                 DiceManager currentDice = currentDiceSet.m_Dice[j];
@@ -454,39 +213,25 @@ public class GameManager : MonoBehaviour {
         return noMovement;
     }
 
-    void ShowResultsScreen()
+    public bool GetDoneRolling()
     {
-        
-        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
-        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
-
-        selectionScreen.SetActive(true);
-        
-        for (int i = 0; i < diceSelectors.transform.childCount; i++)
-        {
-            GameObject diceSelector = diceSelectors.transform.GetChild(i).gameObject;
-            DiceSet currentDiceSet = m_DiceSets[i];
-
-            diceSelector.transform.Find("btnAddNew").gameObject.SetActive(false);
-            diceSelector.transform.Find("btnRemove").gameObject.SetActive(false);
-            diceSelector.transform.Find("lblTotal").gameObject.SetActive(true);
-            diceSelector.transform.Find("lblTotal").GetComponent<Text>().text = "Total: " + currentDiceSet.total;
-
-        }
-
-        btnResultsBack.gameObject.SetActive(true);
-        btnRoll.gameObject.SetActive(false);
-        btnSelectBack.gameObject.SetActive(false);
-
+        return _doneRolling;
     }
 
-    void GetTotals()
+    public void SetDoneRolling(bool doneRolling)
+    {
+        _doneRolling = doneRolling;
+    }
+
+
+
+    public void GetTotals()
     {
         int diceSetTotal = 0;
-        for (int i = 0; i < m_DiceSets.Count; i++)
+        for (int i = 0; i < _diceSets.Count; i++)
         {
             diceSetTotal = 0;
-            DiceSet currentDiceSet = m_DiceSets[i];
+            DiceSet currentDiceSet = _diceSets[i];
             for (int j = 0; j < currentDiceSet.m_Dice.Count; j++)
             {
                 DiceManager currentDice = currentDiceSet.m_Dice[j];
@@ -494,7 +239,7 @@ public class GameManager : MonoBehaviour {
             }
             diceSetTotal += currentDiceSet.modifier;
             currentDiceSet.total = diceSetTotal;
-            m_DiceSets[i] = currentDiceSet;
+            _diceSets[i] = currentDiceSet;
         }
     }
 
@@ -540,4 +285,18 @@ public class GameManager : MonoBehaviour {
     }
 
 
+}
+
+public class DiceSetInfo
+{
+    public int numberOfDice;
+    public int diceType;
+    public int diceModifier;
+}
+
+public class DiceSet
+{
+    public List<DiceManager> m_Dice;
+    public int modifier;
+    public int total;
 }
