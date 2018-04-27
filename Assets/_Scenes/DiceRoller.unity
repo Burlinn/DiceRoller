@@ -387,7 +387,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Total: '
+  m_Text: 'Result: '
 --- !u!222 &58281433
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -754,7 +754,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Dice Roller!
+  m_Text: Roll Play
 --- !u!222 &207353563
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1345,7 +1345,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Dice Roller!
+  m_Text: Roll Play
 --- !u!222 &641100142
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1954,6 +1954,7 @@ MonoBehaviour:
   btnRoll: {fileID: 1149125326}
   btnSelectBack: {fileID: 1920786861}
   btnResultsBack: {fileID: 149801531}
+  btnSpecialResultsBack: {fileID: 2042694051}
   btnQuit: {fileID: 23205146}
   DiceSelector: {fileID: 1642643098944384, guid: 3bee133113d7e5849bbbbd91a6bcb66e,
     type: 2}
@@ -2690,7 +2691,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Dice Roller!
+  m_Text: Roll Play
 --- !u!222 &1491604430
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3231,7 +3232,7 @@ GameObject:
   - component: {fileID: 2042694052}
   - component: {fileID: 2042694051}
   m_Layer: 5
-  m_Name: btnResultsBack
+  m_Name: btnSpecialResultsBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

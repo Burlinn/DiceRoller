@@ -17,10 +17,12 @@ public class CanvasManager : MonoBehaviour
     public Button btnRoll;
     public Button btnSelectBack;
     public Button btnResultsBack;
+    public Button btnSpecialResultsBack;
     public Button btnQuit;
     public GameObject DiceSelector;
     public GameManager _gameManager;
     public int diceSelectionAdjustment;
+    private string _selection = string.Empty;
     
 
 
@@ -36,7 +38,15 @@ public class CanvasManager : MonoBehaviour
     {
         if (_gameManager.GetDoneRolling())
         {
-            ShowResultsScreen();
+            if (_selection == "RollMisc")
+            {
+                ShowResultsScreen();
+            }
+            else if(_selection == "RollD20" || _selection == "RollCoin")
+            {
+                ShowSpecialResultsScreen();
+            }
+            
         }
     }
 
@@ -48,6 +58,7 @@ public class CanvasManager : MonoBehaviour
         btnQuit.GetComponent<Button>().onClick.AddListener(delegate { QuitClick(); });
         btnRoll.GetComponent<Button>().onClick.AddListener(delegate { RollClick(); });
         btnResultsBack.GetComponent<Button>().onClick.AddListener(delegate { ResultsBackClick(); });
+        btnSpecialResultsBack.GetComponent<Button>().onClick.AddListener(delegate { SpecialResultsBackClick(); });
         btnSelectBack.GetComponent<Button>().onClick.AddListener(delegate { SelectBackClick(); });
 
         ShowIntroScreen();
@@ -60,9 +71,12 @@ public class CanvasManager : MonoBehaviour
     {
         GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
         GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
+        GameObject specialSelectScreen = m_MessageCanvas.transform.Find("SpecialSelectScreen").gameObject;
 
         introScreen.SetActive(true);
         selectionScreen.SetActive(false);
+        specialSelectScreen.SetActive(false);
+
     }
 
     public void ShowSelectScreen()
@@ -180,7 +194,7 @@ public class CanvasManager : MonoBehaviour
         }
         _gameManager.RollDice(diceSetInfos);
         selectionScreen.SetActive(false);
-        
+        _selection = "RollMisc";
 
     }
 
@@ -201,6 +215,7 @@ public class CanvasManager : MonoBehaviour
         
         selectionScreen.SetActive(false);
         introScreen.SetActive(false);
+        _selection = "RollD20";
     }
 
     private void FlipCoinClick()
@@ -221,6 +236,7 @@ public class CanvasManager : MonoBehaviour
         
         selectionScreen.SetActive(false);
         introScreen.SetActive(false);
+        _selection = "RollCoin";
 
     }
     
@@ -256,6 +272,16 @@ public class CanvasManager : MonoBehaviour
         btnRoll.gameObject.SetActive(true);
         btnResultsBack.gameObject.SetActive(false);
         btnSelectBack.gameObject.SetActive(true);
+
+    }
+
+    void SpecialResultsBackClick()
+    {
+
+        ShowIntroScreen();
+
+        _gameManager.DestroyDice();
+        _gameManager.SetDoneRolling(false);
 
     }
 
@@ -311,12 +337,47 @@ public class CanvasManager : MonoBehaviour
         btnResultsBack.gameObject.SetActive(true);
         btnRoll.gameObject.SetActive(false);
         btnSelectBack.gameObject.SetActive(false);
+        _selection = string.Empty;
 
     }
 
- 
+    public void ShowSpecialResultsScreen()
+    {
+        GameObject selectionScreen = m_MessageCanvas.transform.Find("SpecialSelectScreen").gameObject;
+        _gameManager.GetTotals();
+        List<DiceSet> diceSets = _gameManager.GetDiceSets();
+        string results = string.Empty;
+        selectionScreen.SetActive(true);
 
-    
+        if (_selection == "RollD20")
+        {
+            results = diceSets[0].total.ToString();
+        }
+        else if (_selection == "RollCoin")
+        {
+            if (diceSets[0].total == 1)
+            {
+                results = "Heads";
+            }
+            else if (diceSets[0].total == 2)
+            {
+                results = "Tails";
+            }
+        }
+
+        selectionScreen.transform.Find("btnSpecialResultsBack").gameObject.SetActive(true);
+        selectionScreen.transform.Find("lblResults").gameObject.SetActive(true);
+        selectionScreen.transform.Find("lblResults").GetComponent<Text>().text = "Result: " + results;
+
+
+        btnSpecialResultsBack.gameObject.SetActive(true);
+        _selection = string.Empty;
+    }
+
+
+
+
+
 
 
 }
