@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour {
             }
             else
             {
-                xCoordinate = -5;
+                xCoordinate = -8;
             }
 
 
