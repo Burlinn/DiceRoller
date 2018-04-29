@@ -13,6 +13,7 @@ public class CanvasManager : MonoBehaviour
     public Canvas m_MessageCanvas;
     public Button btnIntroRollDice;
     public Button btnRollD20;
+    public Button btnRollD100;
     public Button btnFlipCoin;
     public Button btnRoll;
     public Button btnSelectBack;
@@ -42,7 +43,7 @@ public class CanvasManager : MonoBehaviour
             {
                 ShowResultsScreen();
             }
-            else if(_selection == "RollD20" || _selection == "RollCoin")
+            else if(_selection == "RollD20" || _selection == "RollCoin" || _selection == "RollD100")
             {
                 ShowSpecialResultsScreen();
             }
@@ -54,6 +55,7 @@ public class CanvasManager : MonoBehaviour
     {
         btnIntroRollDice.GetComponent<Button>().onClick.AddListener(delegate { ShowSelectScreen(); });
         btnRollD20.GetComponent<Button>().onClick.AddListener(delegate { RollD20Click(); });
+        btnRollD100.GetComponent<Button>().onClick.AddListener(delegate { RollD100Click(); });
         btnFlipCoin.GetComponent<Button>().onClick.AddListener(delegate { FlipCoinClick(); });
         btnQuit.GetComponent<Button>().onClick.AddListener(delegate { QuitClick(); });
         btnRoll.GetComponent<Button>().onClick.AddListener(delegate { RollClick(); });
@@ -218,6 +220,33 @@ public class CanvasManager : MonoBehaviour
         _selection = "RollD20";
     }
 
+    private void RollD100Click()
+    {
+        List<DiceSetInfo> diceSetInfos = new List<DiceSetInfo>();
+        DiceSetInfo currentDiceSetInfo = new DiceSetInfo();
+        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
+        GameObject introScreen = m_MessageCanvas.transform.Find("IntroScreen").gameObject;
+
+        currentDiceSetInfo.diceType = 10;
+        currentDiceSetInfo.diceModifier = 0;
+        currentDiceSetInfo.numberOfDice = 1;
+
+        diceSetInfos.Add(currentDiceSetInfo);
+
+        currentDiceSetInfo = new DiceSetInfo();
+        currentDiceSetInfo.diceType = 100;
+        currentDiceSetInfo.diceModifier = 0;
+        currentDiceSetInfo.numberOfDice = 1;
+
+        diceSetInfos.Add(currentDiceSetInfo);
+
+        _gameManager.RollDice(diceSetInfos);
+
+        selectionScreen.SetActive(false);
+        introScreen.SetActive(false);
+        _selection = "RollD100";
+    }
+
     private void FlipCoinClick()
     {
 
@@ -352,6 +381,10 @@ public class CanvasManager : MonoBehaviour
         if (_selection == "RollD20")
         {
             results = diceSets[0].total.ToString();
+        }
+        if (_selection == "RollD100")
+        {
+            results = (diceSets[0].total + diceSets[1].total).ToString();
         }
         else if (_selection == "RollCoin")
         {

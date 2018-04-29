@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\Managers\CanvasManager.cs" />
     <Compile Include="Assets\Scripts\Managers\DiceManager.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\TestManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIDirectionControl.cs" />
   </ItemGroup>
   <ItemGroup>

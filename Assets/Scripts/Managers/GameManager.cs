@@ -1,10 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using System;
-using System.IO;
+
 
 public class GameManager : MonoBehaviour {
 
@@ -22,20 +19,25 @@ public class GameManager : MonoBehaviour {
     public GameObject D100;
     public int diceSelectionAdjustment;
     public int rollSpeed;
+    public bool _isTesting = false;
 
     private WaitForSeconds _startWait;
     private List<DiceSet> _diceSets;
     private bool _doneRolling = false;
     private int _diceSelectorsTotal = 1;
     private bool _rollingStart = false;
-
+    
 
 
     // Use this for initialization
     void Start () {
-        //Test();
-        _startWait = new WaitForSeconds(m_StartDelay);
-        GameLoop();
+        if (_isTesting == false)
+        {
+            _startWait = new WaitForSeconds(m_StartDelay);
+            //GameLoop();
+        }
+        
+                
     }
 
     private void GameLoop()
@@ -47,6 +49,10 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    public bool GetIsTesting()
+    {
+        return _isTesting;
+    }
     
     public void RollDice(List<DiceSetInfo> diceSetInfos)
     {
@@ -170,13 +176,17 @@ public class GameManager : MonoBehaviour {
             case 20:
                 dice.m_Instance = GameObject.Instantiate(D20);
                 break;
+            case 100:
+                dice.m_Instance = GameObject.Instantiate(D100);
+                break;
         }
         return dice;
     }
 
     // Update is called once per frame
     void Update () {
-        if(_diceSets != null) { 
+
+        if(_diceSets != null && _isTesting == false) { 
             if(_rollingStart == false)
             {
             
@@ -187,10 +197,11 @@ public class GameManager : MonoBehaviour {
                     GetTotals();
                 }
             }
+          
         }
     }
 
-    bool IsDoneRolling()
+    public bool IsDoneRolling()
     {
         bool noMovement = false;
         for (int i = 0; i < _diceSets.Count; i++)
@@ -243,46 +254,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void Test()
-    {
-        int currentDiceType = 20;
-        int currentValue = 0;
-        var testItems = new Dictionary<int, int>();
-        DiceManager currentDice = new DiceManager();
-        currentDice = SetDiceType(currentDice, currentDiceType);
 
-        for (int i = 1; i <= 20; i++)
-        {
-            testItems[i] = 0;
-        }
-
-        for (int i = 0; i < 1000000; i++)
-        {
-          
-            
-            currentDice.RandomizeDice();
-
-            currentValue = currentDice.GetValue();
-
-            currentDice.UnRandomizeDice();
-
-            var resetValue = currentDice.GetValue();
-
-            testItems[currentValue] = testItems[currentValue] + 1;
-            
-            
-        }
-        string path = "Assets/Resources/TestLog.txt";
-
-        //Write some text to the test.txt file
-        StreamWriter writer = new StreamWriter(path, true);
-        writer.WriteLine("");
-        for (int i = 1; i <= 20; i++)
-        {
-            writer.WriteLine(i + ":" + testItems[i]);
-        }
-        writer.Close();
-    }
 
 
 }
