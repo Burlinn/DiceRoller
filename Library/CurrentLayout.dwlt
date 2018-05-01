@@ -139,7 +139,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 492}
   m_MaxSize: {x: 18008, y: 14042}
   vertical: 0
-  controlID: 134
+  controlID: 66
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 442}
   m_MaxSize: {x: 4002, y: 8042}
   vertical: 1
-  controlID: 10
+  controlID: 46
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -251,7 +251,7 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 1214
-    height: 486
+    height: 487
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 17}
@@ -274,9 +274,9 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 486
+    y: 487
     width: 1214
-    height: 462
+    height: 461
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 16}
@@ -312,9 +312,9 @@ MonoBehaviour:
     height: 463
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: a8270000
-    m_LastClickedID: 10152
-    m_ExpandedIDs: de98feffe098feff84acfeff90acfeff1afcffff000000006a270000b827000004280000
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: 9ae6fdff74e7fdff6ae8fdff98faffff00000000042e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -408,35 +408,35 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Sprites/Dice Textures
+    - Assets/Models
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Sprites/Dice Textures
+  - Assets/Models
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\Nick Burlingame\Documents\Unity Projects\DiceRoller
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 2e260000
-    m_LastClickedID: 9774
-    m_ExpandedIDs: 00000000062600000e260000542600005a260000d22a0000ffffff7f
+    m_SelectedIDs: 56270000
+    m_LastClickedID: 10070
+    m_ExpandedIDs: 00000000d4260000dc260000462700004c2700008a2700000a2c0000ec2c0000ffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Resources
+      m_OriginalName: Resources
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 10122
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 2}
     m_SearchString: 
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
@@ -448,7 +448,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000062600000e260000542600005a260000d22a0000
+    m_ExpandedIDs: 00000000d4260000dc260000462700004c2700000a2c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -500,7 +500,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 40}
     m_GridSize: 64
   m_DirectoriesAreaWidth: 115
 --- !u!114 &16
@@ -526,9 +526,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 577
+    y: 578
     width: 1212
-    height: 441
+    height: 440
   m_MaximizeOnPlay: 0
   m_Gizmos: 0
   m_Stats: 0
@@ -539,8 +539,8 @@ MonoBehaviour:
     m_VRangeLocked: 0
     m_HBaseRangeMin: -606
     m_HBaseRangeMax: 606
-    m_VBaseRangeMin: -212
-    m_VBaseRangeMax: 212
+    m_VBaseRangeMin: -211.5
+    m_VBaseRangeMax: 211.5
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -558,9 +558,9 @@ MonoBehaviour:
       x: 0
       y: 17
       width: 1212
-      height: 424
+      height: 423
     m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 606, y: 212}
+    m_Translation: {x: 606, y: 211.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
@@ -568,14 +568,14 @@ MonoBehaviour:
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
       x: -606
-      y: -212
+      y: -211.5
       width: 1212
-      height: 424
+      height: 423
     m_MinimalGUI: 1
   m_defaultScale: 1
   m_TargetTexture: {fileID: 0}
   m_CurrentColorSpace: 0
-  m_LastWindowPixelSize: {x: 1212, y: 441}
+  m_LastWindowPixelSize: {x: 1212, y: 440}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000100000100
@@ -604,16 +604,16 @@ MonoBehaviour:
     x: 0
     y: 91
     width: 1212
-    height: 465
+    height: 466
   m_SceneLighting: 1
   lastFramingTime: 1385.7607681454851
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -3.1782217, y: -11.621175, z: 5.555599}
+    m_Target: {x: -3.9218035, y: -5.674756, z: 2.9638875}
     speed: 2
-    m_Value: {x: -3.1782217, y: -11.621175, z: 5.555599}
+    m_Value: {x: -3.9218035, y: -5.674756, z: 2.9638875}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -636,13 +636,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.48336995, y: -0.1967673, z: 0.11248082, w: 0.8455673}
+    m_Target: {x: 0.33553854, y: -0.4653983, z: 0.19639014, w: 0.795141}
     speed: 2
-    m_Value: {x: 0.48336998, y: -0.19676732, z: 0.11248083, w: 0.84556735}
+    m_Value: {x: 0.33553854, y: -0.4653983, z: 0.19639014, w: 0.795141}
   m_Size:
-    m_Target: 27.416002
+    m_Target: 15.777734
     speed: 2
-    m_Value: 27.416002
+    m_Value: 15.777734
   m_Ortho:
     m_Target: 0
     speed: 2

@@ -14,19 +14,50 @@ public class DiceManager : MonoBehaviour {
     public bool isMoving;
     public Vector3 lastPosition;
     public Vector3 secondLastPosition;
-
+    public Texture texture;
+    public List<string> _diceColors;
 
 
 
 
     // Use this for initialization
     void Start() {
+       
+    }
 
+    private void SetUpColors()
+    {
+        _diceColors = new List<string>();
+        _diceColors.Add("Yellow");
+        _diceColors.Add("Black");
+        _diceColors.Add("BlueGrey");
+        _diceColors.Add("DarkGreen");
+        _diceColors.Add("DarkRed");
+        _diceColors.Add("LightBlue");
     }
 
     public void RandomizeDice()
     {
         m_Instance.transform.rotation = UniformRandomRotation();
+    }
+
+    public void SetTexture(int diceType, int diceColorIndex)
+    {
+
+        string diceColor;
+        string path;
+        Texture texture;
+
+        if (_diceColors == null)
+        {
+            SetUpColors();
+        }
+        diceColor = _diceColors[diceColorIndex];
+        path = "Dice_Textures/D" + diceType + "/D" + diceType + "_Texture_" + diceColor;
+        texture = Resources.Load(path, typeof(Texture)) as Texture;
+
+        m_Instance.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
+
     }
 
     Quaternion UniformRandomRotation()
@@ -90,6 +121,6 @@ public class DiceManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+       
 	}
 }

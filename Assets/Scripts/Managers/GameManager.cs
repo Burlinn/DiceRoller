@@ -60,6 +60,9 @@ public class GameManager : MonoBehaviour {
         int xCoordinate = 0;
         int zCoordinate = 0;
         bool isPositive = true;
+        int diceColorIndex = 0;
+
+
 
         zCoordinate = diceSetInfos.Count;
         _diceSets = new List<DiceSet>();
@@ -68,7 +71,7 @@ public class GameManager : MonoBehaviour {
             yCoordinate = 10;
             DiceSetInfo diceSetInfo = diceSetInfos[i];
             DiceSet currentDiceSet = new DiceSet();
-           
+            diceColorIndex = UnityEngine.Random.Range(0, 6);
 
             currentDiceSet.m_Dice = new List<DiceManager>();
             currentDiceSet.modifier = diceSetInfo.diceModifier;
@@ -86,6 +89,7 @@ public class GameManager : MonoBehaviour {
             {
                 DiceManager currentDice = new DiceManager();
                 currentDice = SetDiceType(currentDice, diceSetInfo.diceType);
+                currentDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
                 currentDice.RandomizeDice();
 
                 currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
@@ -185,7 +189,6 @@ public class GameManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-
         if(_diceSets != null && _isTesting == false) { 
             if(_rollingStart == false)
             {
