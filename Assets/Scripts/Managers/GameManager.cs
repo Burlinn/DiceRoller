@@ -142,7 +142,10 @@ public class GameManager : MonoBehaviour {
 
     public void DestroyDice()
     {
-        _diceSets.Clear();
+        if(_diceSets != null)
+        {
+            _diceSets.Clear();
+        }
         GameObject[] allDice = GameObject.FindGameObjectsWithTag("Dice");
         foreach (GameObject dice in allDice)
         {

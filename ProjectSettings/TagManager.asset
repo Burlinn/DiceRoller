@@ -7,6 +7,7 @@ TagManager:
   - D4
   - Value
   - Dice
+  - DiceSelector
   layers:
   - Default
   - TransparentFX

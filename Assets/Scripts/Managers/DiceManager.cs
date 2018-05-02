@@ -53,7 +53,15 @@ public class DiceManager : MonoBehaviour {
             SetUpColors();
         }
         diceColor = _diceColors[diceColorIndex];
-        path = "Dice_Textures/D" + diceType + "/D" + diceType + "_Texture_" + diceColor;
+        if(diceType == 2)
+        {
+            path = "Dice_Textures/D" + diceType + "/D" + diceType + "_Texture";
+        }
+        else
+        {
+            path = "Dice_Textures/D" + diceType + "/D" + diceType + "_Texture_" + diceColor;
+        }
+        
         texture = Resources.Load(path, typeof(Texture)) as Texture;
 
         m_Instance.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
