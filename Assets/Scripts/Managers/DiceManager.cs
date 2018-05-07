@@ -8,13 +8,10 @@ public class DiceManager : MonoBehaviour {
     [HideInInspector]
     public GameObject[] m_values;
     [HideInInspector]
-    public Texture m_texture;
-    [HideInInspector]
     public GameObject m_Instance;
     public bool isMoving;
     public Vector3 lastPosition;
     public Vector3 secondLastPosition;
-    public Texture texture;
     public List<string> _diceColors;
 
 
@@ -66,6 +63,13 @@ public class DiceManager : MonoBehaviour {
 
         m_Instance.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
 
+    }
+
+    public DiceManager CopyDiceForView(DiceManager dice)
+    {
+        DiceManager newDice = new DiceManager();
+        newDice.m_values = dice.m_values;
+        return newDice;
     }
 
     Quaternion UniformRandomRotation()

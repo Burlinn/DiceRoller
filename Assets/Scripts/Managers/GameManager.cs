@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour {
 
     private WaitForSeconds _startWait;
     private List<DiceSet> _diceSets;
+    private List<DiceSet> _viewDiceSets;
     private bool _doneRolling = false;
     private int _diceSelectorsTotal = 1;
     private bool _rollingStart = false;
@@ -61,19 +62,22 @@ public class GameManager : MonoBehaviour {
         int zCoordinate = 0;
         bool isPositive = true;
         int diceColorIndex = 0;
-
+        int viewXCoordinate = -50;
 
 
         zCoordinate = diceSetInfos.Count;
         _diceSets = new List<DiceSet>();
+        _viewDiceSets = new List<DiceSet>();
         for (int i = 0; i < diceSetInfos.Count; i++)
         {
             yCoordinate = 10;
             DiceSetInfo diceSetInfo = diceSetInfos[i];
             DiceSet currentDiceSet = new DiceSet();
+            DiceSet currentViewDiceSet = new DiceSet();
             diceColorIndex = UnityEngine.Random.Range(0, 6);
 
             currentDiceSet.m_Dice = new List<DiceManager>();
+            currentViewDiceSet.m_Dice = new List<DiceManager>();
             currentDiceSet.modifier = diceSetInfo.diceModifier;
             if (diceSetInfo.numberOfDice < 10)
             {
@@ -88,14 +92,18 @@ public class GameManager : MonoBehaviour {
             for (int j = 0; j < diceSetInfo.numberOfDice; j++)
             {
                 DiceManager currentDice = new DiceManager();
+                DiceManager currentViewDice = new DiceManager();
                 currentDice = SetDiceType(currentDice, diceSetInfo.diceType);
+                currentViewDice = SetDiceType(currentViewDice, diceSetInfo.diceType);
                 currentDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
+                currentViewDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
                 currentDice.RandomizeDice();
 
                 currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
-
-                currentDice.m_Instance.transform.GetComponent<Rigidbody>().AddForce(0, 0, rollSpeed);
+                currentViewDice.m_Instance.transform.position = new Vector3(xCoordinate + viewXCoordinate, yCoordinate, zCoordinate);
+                currentViewDice.m_Instance.GetComponent<Rigidbody>().useGravity = false;
                 currentDiceSet.m_Dice.Add(currentDice);
+                currentViewDiceSet.m_Dice.Add(currentViewDice);
                 if (isPositive)
                 {
                     xCoordinate += 1;
@@ -122,6 +130,7 @@ public class GameManager : MonoBehaviour {
             }
             zCoordinate -= 2;
             _diceSets.Add(currentDiceSet);
+            _viewDiceSets.Add(currentViewDiceSet);
         }
         StartCoroutine(StartRoll());
 
@@ -133,6 +142,11 @@ public class GameManager : MonoBehaviour {
         return _diceSets;
     }
 
+    public List<DiceSet> GetViewDiceSets()
+    {
+        return _viewDiceSets;
+    }
+    
     IEnumerator StartRoll()
     {
         _rollingStart = true;

@@ -8,6 +8,8 @@ TagManager:
   - Value
   - Dice
   - DiceSelector
+  - Content
+  - DicePanel
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - DiceView
   - 
   - 
   - 
@@ -44,4 +46,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 3460921533
+    locked: 0
+  - name: DiceView
+    uniqueID: 2053920407
     locked: 0
