@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     public float m_StartDelay = 3.0f;
+    public float m_CheckDelay = 0.5f;
     public CameraControl m_CameraControl;
     public Canvas m_MessageCanvas;
     public GameObject DiceSelector;
@@ -25,8 +26,9 @@ public class GameManager : MonoBehaviour {
     private List<DiceSet> _diceSets;
     private List<DiceSet> _viewDiceSets;
     private bool _doneRolling = false;
+    private bool _checkRollingAgain = true;
     private int _diceSelectorsTotal = 1;
-    private bool _rollingStart = false;
+    //private bool _rollingStart = false;
     
 
 
@@ -79,6 +81,8 @@ public class GameManager : MonoBehaviour {
             currentDiceSet.m_Dice = new List<DiceManager>();
             currentViewDiceSet.m_Dice = new List<DiceManager>();
             currentDiceSet.modifier = diceSetInfo.diceModifier;
+            currentDiceSet.diceType = diceSetInfo.diceType;
+            currentViewDiceSet.diceType = diceSetInfo.diceType;
             if (diceSetInfo.numberOfDice < 10)
             {
                 xCoordinate = -1 * (diceSetInfo.numberOfDice / 2);
@@ -132,7 +136,6 @@ public class GameManager : MonoBehaviour {
             _diceSets.Add(currentDiceSet);
             _viewDiceSets.Add(currentViewDiceSet);
         }
-        StartCoroutine(StartRoll());
 
     }
 
@@ -147,18 +150,53 @@ public class GameManager : MonoBehaviour {
         return _viewDiceSets;
     }
     
-    IEnumerator StartRoll()
+    IEnumerator ResetCheckAgain()
     {
-        _rollingStart = true;
-        yield return new WaitForSeconds(m_StartDelay);
-        _rollingStart = false;
+        _checkRollingAgain = false;
+        yield return new WaitForSeconds(m_CheckDelay);
+        _checkRollingAgain = true;
     }
 
     public void DestroyDice()
     {
+        List<DiceManager> diceList;
         if(_diceSets != null)
         {
+            foreach (DiceSet diceSet in _diceSets)
+            {
+                foreach(DiceManager dice in diceSet.m_Dice)
+                {
+                    Destroy(dice.m_Instance.gameObject);
+                }
+            }
+            //    for (int i = 0; i < _diceSets.Count; i++)
+            //{
+            //    diceList = _diceSets[i].m_Dice;
+            //    for(int j = 0; j < diceList.Count; j++)
+            //    {
+            //        Destroy(diceList[j]);
+            //    }
+            //}
             _diceSets.Clear();
+        }
+        if(_viewDiceSets != null)
+        {
+            foreach (DiceSet diceSet in _viewDiceSets)
+            {
+                foreach (DiceManager dice in diceSet.m_Dice)
+                {
+                    Destroy(dice.m_Instance.gameObject);
+                }
+            }
+            //for (int i = 0; i < _viewDiceSets.Count; i++)
+            //{
+            //    diceList = _viewDiceSets[i].m_Dice;
+            //    for (int j = 0; j < diceList.Count; j++)
+            //    {
+            //        Destroy(diceList[j].gameObject);
+            //    }
+            //}
+            _viewDiceSets.Clear();
         }
         GameObject[] allDice = GameObject.FindGameObjectsWithTag("Dice");
         foreach (GameObject dice in allDice)
@@ -207,38 +245,40 @@ public class GameManager : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         if(_diceSets != null && _isTesting == false) { 
-            if(_rollingStart == false)
-            {
-            
-                _doneRolling = IsDoneRolling();
+            _doneRolling = IsDoneRolling();
       
-                if (_doneRolling == true)
-                {
-                    GetTotals();
-                }
+            if (_doneRolling == true)
+            {
+                GetTotals();
             }
-          
+  
         }
     }
 
     public bool IsDoneRolling()
     {
         bool noMovement = false;
-        for (int i = 0; i < _diceSets.Count; i++)
-        {
-            DiceSet currentDiceSet = _diceSets[i];
-            for (int j = 0; j < currentDiceSet.m_Dice.Count; j++)
+        if( _checkRollingAgain == true) { 
+            for (int i = 0; i < _diceSets.Count; i++)
             {
-                DiceManager currentDice = currentDiceSet.m_Dice[j];
-                if (currentDice.GetIsMoving() == false)
+                DiceSet currentDiceSet = _diceSets[i];
+                for (int j = 0; j < currentDiceSet.m_Dice.Count; j++)
                 {
-                    noMovement = true;
+                    DiceManager currentDice = currentDiceSet.m_Dice[j];
+                    if (currentDice.GetIsMoving() == false)
+                    {
+                        noMovement = true;
+                        break;
+                    }
+                }
+                if (noMovement == true)
+                {
                     break;
                 }
-            }
-            if (noMovement == true)
-            {
-                break;
+                else
+                {
+                    StartCoroutine(ResetCheckAgain());
+                }
             }
         }
         return noMovement;
@@ -290,5 +330,6 @@ public class DiceSet
 {
     public List<DiceManager> m_Dice;
     public int modifier;
+    public int diceType;
     public int total;
 }

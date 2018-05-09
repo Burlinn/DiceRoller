@@ -11,7 +11,7 @@ public class DiceManager : MonoBehaviour {
     public GameObject m_Instance;
     public bool isMoving;
     public Vector3 lastPosition;
-    public Vector3 secondLastPosition;
+    //public Vector3 secondLastPosition;
     public List<string> _diceColors;
 
 
@@ -117,7 +117,7 @@ public class DiceManager : MonoBehaviour {
     {
         bool isMoving = true;
         Vector3 currentPosition = m_Instance.transform.position;
-        if (currentPosition.Equals(lastPosition) && currentPosition.Equals(secondLastPosition))
+        if (currentPosition.ToString() == lastPosition.ToString())
         {
             isMoving = false;
         }
@@ -125,7 +125,6 @@ public class DiceManager : MonoBehaviour {
         {
             isMoving = true;
         }
-        secondLastPosition = lastPosition;
         lastPosition = currentPosition;
         
         return isMoving;

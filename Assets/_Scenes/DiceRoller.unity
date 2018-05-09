@@ -6420,6 +6420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StartDelay: 2
+  m_CheckDelay: 2
   m_CameraControl: {fileID: 0}
   m_MessageCanvas: {fileID: 974809126}
   DiceSelector: {fileID: 1642643098944384, guid: 3bee133113d7e5849bbbbd91a6bcb66e,
