@@ -28,16 +28,14 @@ public class GameManager : MonoBehaviour {
     private bool _doneRolling = false;
     private bool _checkRollingAgain = true;
     private int _diceSelectorsTotal = 1;
-    //private bool _rollingStart = false;
-    
 
 
     // Use this for initialization
     void Start () {
+        
         if (_isTesting == false)
         {
             _startWait = new WaitForSeconds(m_StartDelay);
-            //GameLoop();
         }
         
                 
@@ -45,10 +43,6 @@ public class GameManager : MonoBehaviour {
 
     private void GameLoop()
     {
-        //canvasManager.SetUp();
-
-        //canvasManager.ShowIntroScreen();
-
 
     }
 
@@ -99,6 +93,7 @@ public class GameManager : MonoBehaviour {
                 DiceManager currentViewDice = new DiceManager();
                 currentDice = SetDiceType(currentDice, diceSetInfo.diceType);
                 currentViewDice = SetDiceType(currentViewDice, diceSetInfo.diceType);
+                currentViewDice.m_Instance.gameObject.GetComponent<DiceScript>().SetIsRolling(false);
                 currentDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
                 currentViewDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
                 currentDice.RandomizeDice();
@@ -169,14 +164,6 @@ public class GameManager : MonoBehaviour {
                     Destroy(dice.m_Instance.gameObject);
                 }
             }
-            //    for (int i = 0; i < _diceSets.Count; i++)
-            //{
-            //    diceList = _diceSets[i].m_Dice;
-            //    for(int j = 0; j < diceList.Count; j++)
-            //    {
-            //        Destroy(diceList[j]);
-            //    }
-            //}
             _diceSets.Clear();
         }
         if(_viewDiceSets != null)
@@ -188,14 +175,6 @@ public class GameManager : MonoBehaviour {
                     Destroy(dice.m_Instance.gameObject);
                 }
             }
-            //for (int i = 0; i < _viewDiceSets.Count; i++)
-            //{
-            //    diceList = _viewDiceSets[i].m_Dice;
-            //    for (int j = 0; j < diceList.Count; j++)
-            //    {
-            //        Destroy(diceList[j].gameObject);
-            //    }
-            //}
             _viewDiceSets.Clear();
         }
         GameObject[] allDice = GameObject.FindGameObjectsWithTag("Dice");

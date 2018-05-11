@@ -482,7 +482,7 @@ public class CanvasManager : MonoBehaviour
             diceSelector.transform.Find("btnAddNew").gameObject.SetActive(false);
             diceSelector.transform.Find("btnRemove").gameObject.SetActive(false);
             diceSelector.transform.Find("lblTotal").gameObject.SetActive(true);
-            diceSelector.transform.Find("lblTotal").GetComponent<Text>().text = "Total: " + currentDiceSet.total;
+            diceSelector.transform.Find("lblTotal").GetComponent<Text>().text = "= " + currentDiceSet.total;
 
         }
 

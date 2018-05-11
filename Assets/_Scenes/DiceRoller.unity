@@ -6389,7 +6389,7 @@ MonoBehaviour:
   DiceSelector: {fileID: 1642643098944384, guid: 3bee133113d7e5849bbbbd91a6bcb66e,
     type: 2}
   _gameManager: {fileID: 985957104}
-  diceSelectionAdjustmentY: 1.2
+  diceSelectionAdjustmentY: 1.1
   diceSelectionAdjustmentZ: 1.45
 --- !u!1 &985957103
 GameObject:

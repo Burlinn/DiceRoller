@@ -9,11 +9,11 @@ public class DiceManager : MonoBehaviour {
     public GameObject[] m_values;
     [HideInInspector]
     public GameObject m_Instance;
-    public bool isMoving;
-    public Vector3 lastPosition;
+    private bool isMoving;
+    private Vector3 lastPosition;
     //public Vector3 secondLastPosition;
-    public List<string> _diceColors;
-
+    private List<string> _diceColors;
+    public GameManager _gameManager;
 
 
 
@@ -32,6 +32,11 @@ public class DiceManager : MonoBehaviour {
         _diceColors.Add("DarkRed");
         _diceColors.Add("LightBlue");
     }
+
+    //public void SetIsRolling()
+    //{
+    //    m_Instance.gameObject.GetComponent<DiceScript>
+    //}
 
     public void RandomizeDice()
     {
@@ -129,9 +134,11 @@ public class DiceManager : MonoBehaviour {
         
         return isMoving;
     }
-	
-	// Update is called once per frame
-	void Update () {
-       
-	}
+
+
+    // Update is called once per frame
+    void Update () {
+         
+
+    }
 }

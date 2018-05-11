@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 23863413725192164}
   - component: {fileID: 64732560988233192}
   - component: {fileID: 54964055765076444}
+  - component: {fileID: 114308850502688974}
   m_Layer: 0
   m_Name: D20_Textured
   m_TagString: Dice
@@ -567,7 +568,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1743783714781668}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -5.109919, y: 1.294, z: 6.1883535}
+  m_LocalPosition: {x: -0.27847576, y: 18.29992, z: -19.623749}
   m_LocalScale: {x: 50, y: 50, z: 50}
   m_Children:
   - {fileID: 4616541356498694}
@@ -720,3 +721,14 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 37db495e4487f5e479f0c637e3f6df0e, type: 3}
+--- !u!114 &114308850502688974
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1743783714781668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1313e11f2675ef54d87c66e8ab8853f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
