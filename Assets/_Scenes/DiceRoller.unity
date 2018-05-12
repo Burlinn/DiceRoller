@@ -6391,6 +6391,7 @@ MonoBehaviour:
   _gameManager: {fileID: 985957104}
   diceSelectionAdjustmentY: 1.1
   diceSelectionAdjustmentZ: 1.45
+  m_CheckDelay: 1
 --- !u!1 &985957103
 GameObject:
   m_ObjectHideFlags: 0
@@ -6426,7 +6427,7 @@ MonoBehaviour:
   DiceSelector: {fileID: 1642643098944384, guid: 3bee133113d7e5849bbbbd91a6bcb66e,
     type: 2}
   D2: {fileID: 1678977676424566, guid: da7e67700f11bb94e96f4886d5ca8a11, type: 2}
-  D4: {fileID: 1200296773725858, guid: 677f194cad034ec448187d4e20feb44b, type: 2}
+  D4: {fileID: 1594189362671770, guid: 677f194cad034ec448187d4e20feb44b, type: 2}
   D6: {fileID: 1110125225268056, guid: edb26874fc7465f4d8650f6e78ddb73a, type: 2}
   D8: {fileID: 1191690165728620, guid: b2b8116f0f4631b4fbc9302fae6cd4e4, type: 2}
   D10: {fileID: 1052164162290294, guid: 517561fb2a21d4a4c84d3c3e0f5762d0, type: 2}
@@ -9330,7 +9331,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 260, y: -140}
+  m_AnchoredPosition: {x: 250, y: -140}
   m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1596715422
@@ -9884,7 +9885,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: -140}
+  m_AnchoredPosition: {x: -83, y: -140}
   m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1653743336

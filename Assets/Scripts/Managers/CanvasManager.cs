@@ -28,7 +28,8 @@ public class CanvasManager : MonoBehaviour
     private string _selection = string.Empty;
     private int currentResultScreen = -1;
     private List<GameObject> _panelList;
-    
+    public float m_CheckDelay = 1f;
+
 
 
     // Use this for initialization
@@ -191,6 +192,7 @@ public class CanvasManager : MonoBehaviour
 
     void CheckMaxDiceCount(int id)
     {
+        //yield return new WaitForSeconds(m_CheckDelay);
         GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
         GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
         GameObject selectorToCheck = diceSelectors.transform.GetChild(id).gameObject;
@@ -565,12 +567,38 @@ public class CanvasManager : MonoBehaviour
                     viewDiceList[j].m_Instance.transform.rotation = diceList[j].m_Instance.transform.rotation;
                     viewDiceList[j].m_Instance.GetComponent<MeshCollider>().enabled = false;
                     viewDiceList[j].m_Instance.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                    viewDiceList[j].m_Instance.transform.localScale = new Vector3(10000, 10000, 10000);
+                    switch (viewDiceSet.diceType)
+                    {
+                        case 4:
+                            viewDiceList[j].m_Instance.transform.localScale = new Vector3(100, 100, 100);
+                            break;
+                        case 6: case 8:
+                            viewDiceList[j].m_Instance.transform.localScale = new Vector3(8000, 8000, 8000);
+                            break;
+                        case 10: case 100:
+                            viewDiceList[j].m_Instance.transform.localScale = new Vector3(9000, 9000, 9000);
+                            break;
+                        case 12: case 20:
+                            viewDiceList[j].m_Instance.transform.localScale = new Vector3(10000, 10000, 10000);
+                            break;
+                    }
+
+                    //if ( == 20 || viewDiceSet.diceType == 12)
+                    //{
+                    //    viewDiceList[j].m_Instance.transform.localScale = new Vector3(10000, 10000, 10000);
+                    //}
+                    //elseif
+
                     viewDiceList[j].m_Instance.transform.position = new Vector3(viewDiceList[j].m_Instance.transform.position.x + .5f, viewDiceList[j].m_Instance.transform.position.y + .5f, viewDiceList[j].m_Instance.transform.position.z);
-                    if(viewDiceSet.diceType != 4)
+
+                    if (viewDiceSet.diceType != 4)
                     {
                         viewDiceList[j].m_Instance.transform.Rotate(new Vector3(-45, 0, 0), Space.World);
                     }
+                    //else
+                    //{
+                    //    viewDiceList[j].m_Instance.transform.Find("Center").transform.position = new Vector3(viewDiceList[j].m_Instance.transform.position.x + .5f, viewDiceList[j].m_Instance.transform.position.y + .5f, viewDiceList[j].m_Instance.transform.position.z);
+                    //}
                     viewDiceList[j].m_Instance.SetActive(false);
 
 
