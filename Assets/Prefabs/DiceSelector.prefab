@@ -316,6 +316,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224488972785859170}
+  - component: {fileID: 114155684599174504}
   m_Layer: 5
   m_Name: DiceSelector
   m_TagString: DiceSelector
@@ -684,6 +685,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 0
+--- !u!114 &114155684599174504
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1642643098944384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88aed18ae5498b84bb8411ee4db7802f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114156723764431608
 MonoBehaviour:
   m_ObjectHideFlags: 1
