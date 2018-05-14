@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour {
     public GameObject D20;
     public GameObject D100;
     public int diceSelectionAdjustment;
-    public int rollSpeed;
     public bool _isTesting = false;
 
     private WaitForSeconds _startWait;
@@ -38,7 +37,8 @@ public class GameManager : MonoBehaviour {
             _startWait = new WaitForSeconds(m_StartDelay);
         }
         
-                
+
+
     }
 
     private void GameLoop()
@@ -50,7 +50,26 @@ public class GameManager : MonoBehaviour {
     {
         return _isTesting;
     }
-    
+
+    private void SetCameraTargets()
+    {
+        Transform[] targets = new Transform[_diceSets.Count];
+        int currentCount = 0;
+
+        for (int i = 0; i < targets.Length; i++)
+        {
+            List<DiceManager> currentDice = _diceSets[i].m_Dice;
+            for(int j = 0; j < currentDice.Count; j++)
+            {
+                targets[currentCount] = currentDice[j].m_Instance.transform;
+                currentCount += 1;
+            }
+            
+        }
+
+        m_CameraControl.m_Targets = targets;
+    }
+
     public void RollDice(List<DiceSetInfo> diceSetInfos)
     {
         int yCoordinate = 10;
@@ -131,6 +150,7 @@ public class GameManager : MonoBehaviour {
             _diceSets.Add(currentDiceSet);
             _viewDiceSets.Add(currentViewDiceSet);
         }
+        SetCameraTargets();
 
     }
 
