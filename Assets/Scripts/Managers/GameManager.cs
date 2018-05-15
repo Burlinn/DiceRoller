@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour {
     private bool _doneRolling = false;
     private bool _checkRollingAgain = true;
     private int _diceSelectorsTotal = 1;
+    private int _totalDiceCount;
 
 
     // Use this for initialization
@@ -53,10 +54,10 @@ public class GameManager : MonoBehaviour {
 
     private void SetCameraTargets()
     {
-        Transform[] targets = new Transform[_diceSets.Count];
+        Transform[] targets = new Transform[_totalDiceCount];
         int currentCount = 0;
 
-        for (int i = 0; i < targets.Length; i++)
+        for (int i = 0; i < _diceSets.Count; i++)
         {
             List<DiceManager> currentDice = _diceSets[i].m_Dice;
             for(int j = 0; j < currentDice.Count; j++)
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour {
         }
 
         m_CameraControl.m_Targets = targets;
+        m_CameraControl.SetMoveToDefault(false);
     }
 
     public void RollDice(List<DiceSetInfo> diceSetInfos)
@@ -78,11 +80,11 @@ public class GameManager : MonoBehaviour {
         bool isPositive = true;
         int diceColorIndex = 0;
         int viewXCoordinate = -50;
-
-
+        
         zCoordinate = diceSetInfos.Count;
         _diceSets = new List<DiceSet>();
         _viewDiceSets = new List<DiceSet>();
+        _totalDiceCount = 0;
         for (int i = 0; i < diceSetInfos.Count; i++)
         {
             yCoordinate = 10;
@@ -122,6 +124,7 @@ public class GameManager : MonoBehaviour {
                 currentViewDice.m_Instance.GetComponent<Rigidbody>().useGravity = false;
                 currentDiceSet.m_Dice.Add(currentDice);
                 currentViewDiceSet.m_Dice.Add(currentViewDice);
+                _totalDiceCount++;
                 if (isPositive)
                 {
                     xCoordinate += 1;
@@ -134,13 +137,13 @@ public class GameManager : MonoBehaviour {
 
                 if (xCoordinate >= 9)
                 {
-                    xCoordinate -= 1;
+                    xCoordinate -= 5;
                     yCoordinate += 4;
                     isPositive = false;
                 }
                 if (xCoordinate <= -9)
                 {
-                    xCoordinate += 1;
+                    xCoordinate += 5;
                     yCoordinate += 4;
                     isPositive = true;
                 }
@@ -151,7 +154,6 @@ public class GameManager : MonoBehaviour {
             _viewDiceSets.Add(currentViewDiceSet);
         }
         SetCameraTargets();
-
     }
 
 
@@ -202,7 +204,7 @@ public class GameManager : MonoBehaviour {
         {
             Destroy(dice);
         }
-
+        _totalDiceCount = 0;
 
     }
 
@@ -246,9 +248,12 @@ public class GameManager : MonoBehaviour {
         if(_diceSets != null && _isTesting == false) { 
             _doneRolling = IsDoneRolling();
       
-            if (_doneRolling == true)
+            if (_doneRolling == true && m_CameraControl.GetAtDefaultPosition() == true)
             {
                 GetTotals();
+            }
+            else if(_doneRolling == true){
+                m_CameraControl.SetMoveToDefault(true);
             }
   
         }
@@ -287,6 +292,12 @@ public class GameManager : MonoBehaviour {
     {
         return _doneRolling;
     }
+
+    public bool GetDoneRollingAndCameraDefaulted()
+    {
+        return _doneRolling && m_CameraControl.GetAtDefaultPosition();
+    }
+
 
     public void SetDoneRolling(bool doneRolling)
     {

@@ -43,7 +43,7 @@ public class CanvasManager : MonoBehaviour
 
     void Update()
     {
-        if (_gameManager.GetDoneRolling())
+        if (_gameManager.GetDoneRollingAndCameraDefaulted())
         {
             if (_selection == "CustomRoll")
             {
@@ -111,11 +111,13 @@ public class CanvasManager : MonoBehaviour
         GameObject btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
         GameObject btnRemove = diceSelector.transform.Find("btnRemove").gameObject;
         GameObject txtDiceCount = diceSelector.transform.Find("txtDiceCount").gameObject;
+        GameObject txtModifier = diceSelector.transform.Find("txtModifier").gameObject;
         diceSelector.transform.Find("lblTotal").gameObject.SetActive(false);
         
         btnAddNew.GetComponent<Button>().onClick.AddListener(delegate { AddNewClick(); });
         btnRemove.GetComponent<Button>().onClick.AddListener(delegate { RemoveClick(currentId); });
         txtDiceCount.GetComponent<InputField>().onValueChanged.AddListener(delegate { CheckMaxDiceCount(currentId); });
+        txtModifier.GetComponent<InputField>().onValueChanged.AddListener(delegate { CheckMaxModifier(currentId); });
         diceSelector.name = "DiceSelector1";
         btnResultsBack.gameObject.SetActive(false);
         btnSelectBack.gameObject.SetActive(true);
@@ -145,6 +147,7 @@ public class CanvasManager : MonoBehaviour
         GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
         GameObject lastSelector = FindLastSelector(diceSelectors);
         GameObject txtDiceCount;
+        GameObject txtModifier;
         GameObject diceSelector;
         GameObject btnAddNew;
         GameObject btnRemove;
@@ -165,10 +168,12 @@ public class CanvasManager : MonoBehaviour
             btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
             btnRemove = diceSelector.transform.Find("btnRemove").gameObject;
             txtDiceCount =  diceSelector.transform.Find("txtDiceCount").gameObject;
+            txtModifier = diceSelector.transform.Find("txtModifier").gameObject;
             diceSelector.transform.Find("lblTotal").gameObject.SetActive(false);
             btnAddNew.GetComponent<Button>().onClick.AddListener(delegate { AddNewClick(); });
             btnRemove.GetComponent<Button>().onClick.AddListener(delegate { RemoveClick(currentId); });
             txtDiceCount.GetComponent<InputField>().onValueChanged.AddListener(delegate { CheckMaxDiceCount(currentId); } );
+            txtModifier.GetComponent<InputField>().onValueChanged.AddListener(delegate { CheckMaxModifier(currentId); });
             diceSelector.name = "DiceSelector" + diceSelectors.transform.childCount;
             diceSelector.gameObject.GetComponent<DiceSelectorScript>().SetDiceSelectorId(currentId);
 
@@ -233,6 +238,31 @@ public class CanvasManager : MonoBehaviour
                 break;
             }
             
+        }
+
+    }
+
+    void CheckMaxModifier(int id)
+    {
+
+        GameObject selectionScreen = m_MessageCanvas.transform.Find("SelectionScreen").gameObject;
+        GameObject diceSelectors = selectionScreen.transform.Find("DiceSelectors").gameObject;
+        GameObject currentSelector;
+        GameObject txtModifier;
+        for (int i = 0; i < diceSelectors.transform.childCount; i++)
+        {
+            currentSelector = diceSelectors.transform.GetChild(i).gameObject;
+
+            if (currentSelector.gameObject.GetComponent<DiceSelectorScript>().GetDiceSelectorId() == id)
+            {
+                txtModifier = currentSelector.transform.Find("txtModifier").gameObject;
+                if (Convert.ToInt32(txtModifier.GetComponent<InputField>().text) > 100)
+                {
+                    txtModifier.GetComponent<InputField>().text = "100";
+                }
+                break;
+            }
+
         }
 
     }
@@ -617,7 +647,7 @@ public class CanvasManager : MonoBehaviour
                             break;
                     }
                     
-                    viewDiceList[j].m_Instance.transform.position = new Vector3(viewDiceList[j].m_Instance.transform.position.x + .5f, viewDiceList[j].m_Instance.transform.position.y + .5f, viewDiceList[j].m_Instance.transform.position.z);
+                    viewDiceList[j].m_Instance.transform.position = new Vector3(viewDiceList[j].m_Instance.transform.position.x + .25f, viewDiceList[j].m_Instance.transform.position.y + .25f, viewDiceList[j].m_Instance.transform.position.z);
 
                     if (viewDiceSet.diceType != 4)
                     {
