@@ -27,7 +27,6 @@ public class CanvasManager : MonoBehaviour
     public float diceSelectionAdjustmentZ;
     private string _selection = string.Empty;
     private int currentResultScreen = -1;
-    private List<GameObject> _panelList;
     public float m_CheckDelay = 1f;
     private int _diceSelectorId = 0;
 

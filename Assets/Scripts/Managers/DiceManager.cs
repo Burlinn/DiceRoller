@@ -11,7 +11,6 @@ public class DiceManager : MonoBehaviour {
     public GameObject m_Instance;
     private bool isMoving;
     private Vector3 lastPosition;
-    //public Vector3 secondLastPosition;
     private List<string> _diceColors;
     public GameManager _gameManager;
 
@@ -33,14 +32,9 @@ public class DiceManager : MonoBehaviour {
         _diceColors.Add("LightBlue");
     }
 
-    //public void SetIsRolling()
-    //{
-    //    m_Instance.gameObject.GetComponent<DiceScript>
-    //}
-
     public void RandomizeDice()
     {
-        m_Instance.transform.rotation = UniformRandomRotation();
+        m_Instance.transform.rotation = Quaternion.LookRotation(UnityEngine.Random.onUnitSphere, UnityEngine.Random.onUnitSphere);
     }
 
     public void SetTexture(int diceType, int diceColorIndex)
@@ -75,23 +69,6 @@ public class DiceManager : MonoBehaviour {
         DiceManager newDice = new DiceManager();
         newDice.m_values = dice.m_values;
         return newDice;
-    }
-
-    Quaternion UniformRandomRotation()
-    {
-        float x0 = UnityEngine.Random.value;
-        float theta1 = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
-        float theta2 = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
-        // Make this theta2 in the range (0, PI * 1) if you want w > 0
-
-        float r1 = Mathf.Sqrt(1f - x0);
-        float r2 = Mathf.Sqrt(x0);
-
-        return new Quaternion(
-            Mathf.Cos(theta2) * r2,
-            Mathf.Sin(theta1) * r1,
-            Mathf.Cos(theta1) * r1,
-            Mathf.Sin(theta2) * r2);
     }
 
     public void UnRandomizeDice()

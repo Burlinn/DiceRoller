@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour {
     private List<DiceSet> _viewDiceSets;
     private bool _doneRolling = false;
     private bool _checkRollingAgain = true;
-    private int _diceSelectorsTotal = 1;
     private int _totalDiceCount;
 
 
@@ -176,7 +175,6 @@ public class GameManager : MonoBehaviour {
 
     public void DestroyDice()
     {
-        List<DiceManager> diceList;
         if(_diceSets != null)
         {
             foreach (DiceSet diceSet in _diceSets)

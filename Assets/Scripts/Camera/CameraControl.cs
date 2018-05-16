@@ -45,7 +45,6 @@ public class CameraControl : MonoBehaviour
         {
 
             StartCoroutine(SetAtDefaultPositionAfterResize());
-            //m_AtDefaultPosition = true;
         }
         else
         {

@@ -6440,7 +6440,7 @@ MonoBehaviour:
     type: 2}
   _gameManager: {fileID: 985957104}
   diceSelectionAdjustmentY: 1.1
-  diceSelectionAdjustmentZ: 1.45
+  diceSelectionAdjustmentZ: 1.15
   m_CheckDelay: 1
 --- !u!1 &985957103
 GameObject:
