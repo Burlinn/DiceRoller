@@ -3,72 +3,72 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
-    public float m_DampTime = 0.2f;                 
-    public float m_ScreenEdgeBuffer = 4f;           
-    public float m_MinSize = 4f;
-    public float m_DefaultX = 0;
-    public float m_DefaultY = 24;
-    public float m_DefaultZ = -17;
-    public float m_DefaultSize = 10;
-    public bool m_MoveToDefault = true;
-    [HideInInspector] public Transform[] m_Targets; 
+    public float _dampTime = 0.2f;                 
+    public float _screenEdgeBuffer = 4f;           
+    public float _minSize = 4f;
+    public float _defaultX = 0;
+    public float _defaultY = 24;
+    public float _defaultZ = -17;
+    public float _defaultSize = 10;
+    public bool _moveToDefault = true;
+    [HideInInspector] public Transform[] _targets; 
 
 
-    private Camera m_Camera;                        
-    private float m_ZoomSpeed;                      
-    private Vector3 m_MoveVelocity;                 
-    private Vector3 m_DesiredPosition;
-    private Vector3 m_DefaultPosition;
-    private bool m_AtDefaultPosition = true;
+    private Camera _camera;                        
+    private float _zoomSpeed;                      
+    private Vector3 _moveVelocity;                 
+    private Vector3 _desiredPosition;
+    private Vector3 _defaultPosition;
+    private bool _atDefaultPosition = true;
 
     private void Awake()
     {
-        m_Camera = GetComponentInChildren<Camera>();
-        m_DefaultPosition = new Vector3(m_DefaultX, m_DefaultY, m_DefaultZ);
+        _camera = GetComponentInChildren<Camera>();
+        _defaultPosition = new Vector3(_defaultX, _defaultY, _defaultZ);
     }
 
     public bool GetAtDefaultPosition()
     {
-        return m_AtDefaultPosition;
+        return _atDefaultPosition;
     }
     
     public void SetMoveToDefault(bool moveToDefault)
     {
-        m_MoveToDefault = moveToDefault;
+        _moveToDefault = moveToDefault;
     }
 
     private void FixedUpdate()
     {
         Move();
         Zoom();
-        if (Mathf.Round(m_Camera.orthographicSize) == m_DefaultSize && transform.position == m_DefaultPosition && m_AtDefaultPosition == false)
+        if (Mathf.Round(_camera.orthographicSize) == _defaultSize && transform.position == _defaultPosition && _atDefaultPosition == false)
         {
 
             StartCoroutine(SetAtDefaultPositionAfterResize());
         }
         else
         {
-            m_AtDefaultPosition = false;
+            _atDefaultPosition = false;
         }
     }
 
     IEnumerator SetAtDefaultPositionAfterResize()
     {
-        yield return new WaitForSeconds(m_DampTime);
-        m_AtDefaultPosition = true;
+        yield return new WaitForSeconds(_dampTime);
+        _atDefaultPosition = true;
     }
 
     private void Move()
     {
-        if (m_MoveToDefault == false)
+        if (_moveToDefault == false)
         {
             FindAveragePosition();
         }
         else
         {
-            m_DesiredPosition = m_DefaultPosition;
+            _desiredPosition = _defaultPosition;
         }
-        transform.position = Vector3.SmoothDamp(transform.position, m_DesiredPosition, ref m_MoveVelocity, m_DampTime);
+        transform.position = Vector3.SmoothDamp(transform.position, _desiredPosition, ref _moveVelocity, _dampTime);
     }
 
 
@@ -77,12 +77,12 @@ public class CameraControl : MonoBehaviour
         Vector3 averagePos = new Vector3();
         int numTargets = 0;
 
-        for (int i = 0; i < m_Targets.Length; i++)
+        for (int i = 0; i < _targets.Length; i++)
         {
-            if (!m_Targets[i].gameObject.activeSelf)
+            if (!_targets[i].gameObject.activeSelf)
                 continue;
 
-            averagePos += m_Targets[i].position;
+            averagePos += _targets[i].position;
             numTargets++;
         }
 
@@ -94,52 +94,52 @@ public class CameraControl : MonoBehaviour
         averagePos.z = transform.position.z; ;
         averagePos.y = transform.position.y;
 
-        m_DesiredPosition = averagePos;
+        _desiredPosition = averagePos;
     }
 
 
     private void Zoom()
     {
         float requiredSize;
-        if (m_MoveToDefault == false)
+        if (_moveToDefault == false)
         {
             requiredSize = FindRequiredSize();
         }
         else
         {
-            requiredSize = m_DefaultSize;
+            requiredSize = _defaultSize;
         }
-        m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, m_DampTime);
+        _camera.orthographicSize = Mathf.SmoothDamp(_camera.orthographicSize, requiredSize, ref _zoomSpeed, _dampTime);
     }
 
 
     private float FindRequiredSize()
     {
-        Vector3 desiredLocalPos = transform.InverseTransformPoint(m_DesiredPosition);
+        Vector3 desiredLocalPos = transform.InverseTransformPoint(_desiredPosition);
 
         float size = 0f;
 
-        for (int i = 0; i < m_Targets.Length; i++)
+        for (int i = 0; i < _targets.Length; i++)
         {
-            if (!m_Targets[i].gameObject.activeSelf)
+            if (!_targets[i].gameObject.activeSelf)
                 continue;
 
-            Vector3 targetLocalPos = transform.InverseTransformPoint(m_Targets[i].position);
+            Vector3 targetLocalPos = transform.InverseTransformPoint(_targets[i].position);
 
             Vector3 desiredPosToTarget = targetLocalPos - desiredLocalPos;
 
             size = Mathf.Max (size, Mathf.Abs (desiredPosToTarget.y));
 
-            size = Mathf.Max (size, Mathf.Abs (desiredPosToTarget.x) / m_Camera.aspect);
+            size = Mathf.Max (size, Mathf.Abs (desiredPosToTarget.x) / _camera.aspect);
         }
         
-        size += m_ScreenEdgeBuffer;
+        size += _screenEdgeBuffer;
 
-        size = Mathf.Max(size, m_MinSize);
+        size = Mathf.Max(size, _minSize);
 
-        if (size > m_DefaultSize)
+        if (size > _defaultSize)
         {
-            size = m_DefaultSize;
+            size = _defaultSize;
         }
 
         return size;
@@ -150,8 +150,8 @@ public class CameraControl : MonoBehaviour
     {
         FindAveragePosition();
 
-        transform.position = m_DesiredPosition;
+        transform.position = _desiredPosition;
 
-        m_Camera.orthographicSize = FindRequiredSize();
+        _camera.orthographicSize = FindRequiredSize();
     }
 }

@@ -6,11 +6,10 @@ using UnityEngine;
 public class DiceManager : MonoBehaviour {
 
     [HideInInspector]
-    public GameObject[] m_values;
+    public GameObject[] _values;
     [HideInInspector]
-    public GameObject m_Instance;
-    private bool isMoving;
-    private Vector3 lastPosition;
+    public GameObject _instance;
+    private Vector3 _lastPosition;
     private List<string> _diceColors;
     public GameManager _gameManager;
 
@@ -34,7 +33,7 @@ public class DiceManager : MonoBehaviour {
 
     public void RandomizeDice()
     {
-        m_Instance.transform.rotation = Quaternion.LookRotation(UnityEngine.Random.onUnitSphere, UnityEngine.Random.onUnitSphere);
+        _instance.transform.rotation = Quaternion.LookRotation(UnityEngine.Random.onUnitSphere, UnityEngine.Random.onUnitSphere);
     }
 
     public void SetTexture(int diceType, int diceColorIndex)
@@ -60,26 +59,26 @@ public class DiceManager : MonoBehaviour {
         
         texture = Resources.Load(path, typeof(Texture)) as Texture;
 
-        m_Instance.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
+        _instance.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
 
     }
 
     public DiceManager CopyDiceForView(DiceManager dice)
     {
         DiceManager newDice = new DiceManager();
-        newDice.m_values = dice.m_values;
+        newDice._values = dice._values;
         return newDice;
     }
 
     public void UnRandomizeDice()
     {
-        m_Instance.transform.rotation = Quaternion.Euler(270, 270, 270);
+        _instance.transform.rotation = Quaternion.Euler(270, 270, 270);
     }
 
     public int GetValue()
     {
         int selectedValue = 0;
-        GameObject values = m_Instance.transform.Find("Values").gameObject;
+        GameObject values = _instance.transform.Find("Values").gameObject;
         GameObject currentValue;
         float highestValue = 0;
         for (int i = 0; i < values.transform.childCount; i++)
@@ -98,8 +97,8 @@ public class DiceManager : MonoBehaviour {
     public bool GetIsMoving()
     {
         bool isMoving = true;
-        Vector3 currentPosition = m_Instance.transform.position;
-        if (currentPosition.ToString() == lastPosition.ToString())
+        Vector3 currentPosition = _instance.transform.position;
+        if (currentPosition.ToString() == _lastPosition.ToString())
         {
             isMoving = false;
         }
@@ -107,7 +106,7 @@ public class DiceManager : MonoBehaviour {
         {
             isMoving = true;
         }
-        lastPosition = currentPosition;
+        _lastPosition = currentPosition;
         
         return isMoving;
     }

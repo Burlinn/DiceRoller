@@ -5430,15 +5430,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54e3c1f18f8cbb49b10f5e2dc8a1865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DampTime: 0.2
-  m_ScreenEdgeBuffer: 2
-  m_MinSize: 2
-  m_DefaultX: 0
-  m_DefaultY: 24
-  m_DefaultZ: -17
-  m_DefaultSize: 10
-  m_MoveToDefault: 1
-  m_Targets: []
+  _dampTime: 0.2
+  _screenEdgeBuffer: 4
+  _minSize: 4
+  _defaultX: 0
+  _defaultY: 24
+  _defaultZ: -17
+  _defaultSize: 10
+  _moveToDefault: 1
+  _targets: []
 --- !u!4 &840496282
 Transform:
   m_ObjectHideFlags: 0
@@ -6535,24 +6535,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f56e4c7d4504df149a85e60484b0739f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CameraControl: {fileID: 0}
-  m_MessageCanvas: {fileID: 974809126}
-  btnIntroRollDice: {fileID: 450053711}
-  btnRollD20: {fileID: 1853489163}
-  btnRollD100: {fileID: 1947664049}
-  btnFlipCoin: {fileID: 573183654}
-  btnRoll: {fileID: 1149125326}
-  btnSelectBack: {fileID: 1920786861}
-  btnResultsBack: {fileID: 149801531}
-  btnSpecialResultsBack: {fileID: 2042694051}
-  btnQuit: {fileID: 23205146}
-  btnFlipOrientation: {fileID: 518453144}
-  DiceSelector: {fileID: 1642643098944384, guid: 3bee133113d7e5849bbbbd91a6bcb66e,
+  _cameraControl: {fileID: 840496281}
+  _messageCanvas: {fileID: 974809126}
+  _diceSelector: {fileID: 1642643098944384, guid: 3bee133113d7e5849bbbbd91a6bcb66e,
     type: 2}
   _gameManager: {fileID: 985957104}
-  diceSelectionAdjustmentY: 1.1
-  diceSelectionAdjustmentZ: 1.15
-  m_CheckDelay: 1
+  _diceSelectionAdjustmentY: 1.1
+  _diceSelectionAdjustmentZ: 1.15
 --- !u!1 &985957103
 GameObject:
   m_ObjectHideFlags: 0
@@ -6581,21 +6570,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdebc4776b502884a9bb932b95b5a154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_StartDelay: 2
-  m_CheckDelay: 2
-  m_CameraControl: {fileID: 840496281}
-  m_MessageCanvas: {fileID: 974809126}
-  DiceSelector: {fileID: 1642643098944384, guid: 3bee133113d7e5849bbbbd91a6bcb66e,
+  _startDelay: 2
+  _checkDelay: 2
+  _cameraControl: {fileID: 840496281}
+  _messageCanvas: {fileID: 974809126}
+  _diceSelectorPrefab: {fileID: 1642643098944384, guid: 3bee133113d7e5849bbbbd91a6bcb66e,
     type: 2}
-  D2: {fileID: 1678977676424566, guid: da7e67700f11bb94e96f4886d5ca8a11, type: 2}
-  D4: {fileID: 1594189362671770, guid: 677f194cad034ec448187d4e20feb44b, type: 2}
-  D6: {fileID: 1110125225268056, guid: edb26874fc7465f4d8650f6e78ddb73a, type: 2}
-  D8: {fileID: 1191690165728620, guid: b2b8116f0f4631b4fbc9302fae6cd4e4, type: 2}
-  D10: {fileID: 1052164162290294, guid: 517561fb2a21d4a4c84d3c3e0f5762d0, type: 2}
-  D12: {fileID: 1274575914802440, guid: 56107bbb559997349b835604100ab4fd, type: 2}
-  D20: {fileID: 1743783714781668, guid: cda6ead1333cb874bb30b2f79414a888, type: 2}
-  D100: {fileID: 1746553577118616, guid: 157e237e4cb01d94db2fec1e9b79e150, type: 2}
-  diceSelectionAdjustment: 10
+  _d2Prefab: {fileID: 1678977676424566, guid: da7e67700f11bb94e96f4886d5ca8a11, type: 2}
+  _d4Prefab: {fileID: 1594189362671770, guid: 677f194cad034ec448187d4e20feb44b, type: 2}
+  _d6Prefab: {fileID: 1110125225268056, guid: edb26874fc7465f4d8650f6e78ddb73a, type: 2}
+  _d8Prefab: {fileID: 1191690165728620, guid: b2b8116f0f4631b4fbc9302fae6cd4e4, type: 2}
+  _d10Prefab: {fileID: 1052164162290294, guid: 517561fb2a21d4a4c84d3c3e0f5762d0, type: 2}
+  _d12Prefab: {fileID: 1274575914802440, guid: 56107bbb559997349b835604100ab4fd, type: 2}
+  _d20Prefab: {fileID: 1743783714781668, guid: cda6ead1333cb874bb30b2f79414a888, type: 2}
+  _d100Prefab: {fileID: 1746553577118616, guid: 157e237e4cb01d94db2fec1e9b79e150,
+    type: 2}
+  _diceSelectionAdjustment: 10
   _isTesting: 0
 --- !u!4 &985957105
 Transform:

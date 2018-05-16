@@ -5,20 +5,20 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    public float m_StartDelay = 3.0f;
-    public float m_CheckDelay = 0.5f;
-    public CameraControl m_CameraControl;
-    public Canvas m_MessageCanvas;
-    public GameObject DiceSelector;
-    public GameObject D2;
-    public GameObject D4;
-    public GameObject D6;
-    public GameObject D8;
-    public GameObject D10;
-    public GameObject D12;
-    public GameObject D20;
-    public GameObject D100;
-    public int diceSelectionAdjustment;
+    public float _startDelay;
+    public float _checkDelay;
+    public CameraControl _cameraControl;
+    public Canvas _messageCanvas;
+    public GameObject _diceSelectorPrefab;
+    public GameObject _d2Prefab;
+    public GameObject _d4Prefab;
+    public GameObject _d6Prefab;
+    public GameObject _d8Prefab;
+    public GameObject _d10Prefab;
+    public GameObject _d12Prefab;
+    public GameObject _d20Prefab;
+    public GameObject _d100Prefab;
+    public int _diceSelectionAdjustment;
     public bool _isTesting = false;
 
     private WaitForSeconds _startWait;
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
         
         if (_isTesting == false)
         {
-            _startWait = new WaitForSeconds(m_StartDelay);
+            _startWait = new WaitForSeconds(_startDelay);
         }
         Screen.orientation = ScreenOrientation.Portrait;
         
@@ -61,14 +61,14 @@ public class GameManager : MonoBehaviour {
             List<DiceManager> currentDice = _diceSets[i].m_Dice;
             for(int j = 0; j < currentDice.Count; j++)
             {
-                targets[currentCount] = currentDice[j].m_Instance.transform;
+                targets[currentCount] = currentDice[j]._instance.transform;
                 currentCount += 1;
             }
             
         }
 
-        m_CameraControl.m_Targets = targets;
-        m_CameraControl.SetMoveToDefault(false);
+        _cameraControl._targets = targets;
+        _cameraControl.SetMoveToDefault(false);
     }
 
     public void RollDice(List<DiceSetInfo> diceSetInfos)
@@ -126,14 +126,14 @@ public class GameManager : MonoBehaviour {
                 DiceManager currentViewDice = new DiceManager();
                 currentDice = SetDiceType(currentDice, diceSetInfo.diceType);
                 currentViewDice = SetDiceType(currentViewDice, diceSetInfo.diceType);
-                currentViewDice.m_Instance.gameObject.GetComponent<DiceScript>().SetIsRolling(false);
+                currentViewDice._instance.gameObject.GetComponent<DiceScript>().SetIsRolling(false);
                 currentDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
                 currentViewDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
                 currentDice.RandomizeDice();
 
-                currentDice.m_Instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
-                currentViewDice.m_Instance.transform.position = new Vector3(xCoordinate + viewXCoordinate, yCoordinate, zCoordinate);
-                currentViewDice.m_Instance.GetComponent<Rigidbody>().useGravity = false;
+                currentDice._instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
+                currentViewDice._instance.transform.position = new Vector3(xCoordinate + viewXCoordinate, yCoordinate, zCoordinate);
+                currentViewDice._instance.GetComponent<Rigidbody>().useGravity = false;
                 currentDiceSet.m_Dice.Add(currentDice);
                 currentViewDiceSet.m_Dice.Add(currentViewDice);
                 _totalDiceCount++;
@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour {
     IEnumerator ResetCheckAgain()
     {
         _checkRollingAgain = false;
-        yield return new WaitForSeconds(m_CheckDelay);
+        yield return new WaitForSeconds(_checkDelay);
         _checkRollingAgain = true;
     }
 
@@ -196,7 +196,7 @@ public class GameManager : MonoBehaviour {
             {
                 foreach(DiceManager dice in diceSet.m_Dice)
                 {
-                    Destroy(dice.m_Instance.gameObject);
+                    Destroy(dice._instance.gameObject);
                 }
             }
             _diceSets.Clear();
@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviour {
             {
                 foreach (DiceManager dice in diceSet.m_Dice)
                 {
-                    Destroy(dice.m_Instance.gameObject);
+                    Destroy(dice._instance.gameObject);
                 }
             }
             _viewDiceSets.Clear();
@@ -229,28 +229,28 @@ public class GameManager : MonoBehaviour {
         switch (diceType)
         {
             case 2:
-                dice.m_Instance = GameObject.Instantiate(D2);
+                dice._instance = GameObject.Instantiate(_d2Prefab);
                 break;
             case 4:
-                dice.m_Instance = GameObject.Instantiate(D4);
+                dice._instance = GameObject.Instantiate(_d4Prefab);
                 break;
             case 6:
-                dice.m_Instance = GameObject.Instantiate(D6);
+                dice._instance = GameObject.Instantiate(_d6Prefab);
                 break;
             case 8:
-                dice.m_Instance = GameObject.Instantiate(D8);
+                dice._instance = GameObject.Instantiate(_d8Prefab);
                 break;
             case 10:
-                dice.m_Instance = GameObject.Instantiate(D10);
+                dice._instance = GameObject.Instantiate(_d10Prefab);
                 break;
             case 12:
-                dice.m_Instance = GameObject.Instantiate(D12);
+                dice._instance = GameObject.Instantiate(_d12Prefab);
                 break;
             case 20:
-                dice.m_Instance = GameObject.Instantiate(D20);
+                dice._instance = GameObject.Instantiate(_d20Prefab);
                 break;
             case 100:
-                dice.m_Instance = GameObject.Instantiate(D100);
+                dice._instance = GameObject.Instantiate(_d100Prefab);
                 break;
         }
         return dice;
@@ -261,12 +261,12 @@ public class GameManager : MonoBehaviour {
         if(_diceSets != null && _isTesting == false) { 
             _doneRolling = IsDoneRolling();
       
-            if (_doneRolling == true && m_CameraControl.GetAtDefaultPosition() == true)
+            if (_doneRolling == true && _cameraControl.GetAtDefaultPosition() == true)
             {
                 GetTotals();
             }
             else if(_doneRolling == true){
-                m_CameraControl.SetMoveToDefault(true);
+                _cameraControl.SetMoveToDefault(true);
             }
   
         }
@@ -308,7 +308,7 @@ public class GameManager : MonoBehaviour {
 
     public bool GetDoneRollingAndCameraDefaulted()
     {
-        return _doneRolling && m_CameraControl.GetAtDefaultPosition();
+        return _doneRolling && _cameraControl.GetAtDefaultPosition();
     }
 
 
