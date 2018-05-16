@@ -21,6 +21,7 @@ public class CanvasManager : MonoBehaviour
     public Button btnResultsBack;
     public Button btnSpecialResultsBack;
     public Button btnQuit;
+    public Button btnFlipOrientation;
     public GameObject DiceSelector;
     public GameManager _gameManager;
     public float diceSelectionAdjustmentY;
@@ -72,7 +73,7 @@ public class CanvasManager : MonoBehaviour
         btnResultsBack.GetComponent<Button>().onClick.AddListener(delegate { ResultsBackClick(); });
         btnSpecialResultsBack.GetComponent<Button>().onClick.AddListener(delegate { SpecialResultsBackClick(); });
         btnSelectBack.GetComponent<Button>().onClick.AddListener(delegate { SelectBackClick(); });
-
+        btnFlipOrientation.GetComponent<Button>().onClick.AddListener(delegate { FlipOrientation(); });
 
         btnRight.GetComponent<Button>().onClick.AddListener(delegate { ResultsRightClick(); });
         btnLeft.GetComponent<Button>().onClick.AddListener(delegate { ResultsLeftClick(); });
@@ -162,7 +163,6 @@ public class CanvasManager : MonoBehaviour
             btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y - diceSelectionAdjustmentY, btnRoll.transform.position.z - diceSelectionAdjustmentZ);
             btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y - diceSelectionAdjustmentY, btnResultsBack.transform.position.z - diceSelectionAdjustmentZ);
             btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y - diceSelectionAdjustmentY, btnSelectBack.transform.position.z - diceSelectionAdjustmentZ);
-            btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y - diceSelectionAdjustmentY, btnQuit.transform.position.z - diceSelectionAdjustmentZ);
             diceSelector.transform.position = new Vector3(lastSelector.transform.position.x, lastSelector.transform.position.y - diceSelectionAdjustmentY, lastSelector.transform.position.z - diceSelectionAdjustmentZ);
             btnAddNew = diceSelector.transform.Find("btnAddNew").gameObject;
             btnRemove = diceSelector.transform.Find("btnRemove").gameObject;
@@ -212,7 +212,6 @@ public class CanvasManager : MonoBehaviour
         btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustmentY, btnRoll.transform.position.z + diceSelectionAdjustmentZ);
         btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y + diceSelectionAdjustmentY, btnResultsBack.transform.position.z + diceSelectionAdjustmentZ);
         btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y + diceSelectionAdjustmentY, btnSelectBack.transform.position.z + diceSelectionAdjustmentZ);
-        btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustmentY, btnQuit.transform.position.z + diceSelectionAdjustmentZ);
         
     }
 
@@ -408,7 +407,6 @@ public class CanvasManager : MonoBehaviour
                 btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustmentY, btnRoll.transform.position.z + diceSelectionAdjustmentZ);
                 btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y + diceSelectionAdjustmentY, btnResultsBack.transform.position.z + diceSelectionAdjustmentZ);
                 btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y + diceSelectionAdjustmentY, btnSelectBack.transform.position.z + diceSelectionAdjustmentZ);
-                btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustmentY, btnQuit.transform.position.z + diceSelectionAdjustmentZ);
             }
         }
 
@@ -460,7 +458,6 @@ public class CanvasManager : MonoBehaviour
                 btnRoll.transform.position = new Vector3(btnRoll.transform.position.x, btnRoll.transform.position.y + diceSelectionAdjustmentY, btnRoll.transform.position.z + diceSelectionAdjustmentZ);
                 btnResultsBack.transform.position = new Vector3(btnResultsBack.transform.position.x, btnResultsBack.transform.position.y + diceSelectionAdjustmentY, btnResultsBack.transform.position.z + diceSelectionAdjustmentZ);
                 btnSelectBack.transform.position = new Vector3(btnSelectBack.transform.position.x, btnSelectBack.transform.position.y + diceSelectionAdjustmentY, btnSelectBack.transform.position.z + diceSelectionAdjustmentZ);
-                btnQuit.transform.position = new Vector3(btnQuit.transform.position.x, btnQuit.transform.position.y + diceSelectionAdjustmentY, btnQuit.transform.position.z + diceSelectionAdjustmentZ);
                 
             }
         }
@@ -471,6 +468,18 @@ public class CanvasManager : MonoBehaviour
 
     }
 
+    void FlipOrientation()
+    {
+        if (Screen.orientation == ScreenOrientation.Portrait)
+        {
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
+        }
+        else
+        {
+            Screen.orientation = ScreenOrientation.Portrait;
+        }
+                
+    }
 
     void QuitClick()
     {

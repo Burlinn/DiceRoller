@@ -36,8 +36,8 @@ public class GameManager : MonoBehaviour {
         {
             _startWait = new WaitForSeconds(m_StartDelay);
         }
+        Screen.orientation = ScreenOrientation.Portrait;
         
-
 
     }
 
@@ -74,11 +74,13 @@ public class GameManager : MonoBehaviour {
     public void RollDice(List<DiceSetInfo> diceSetInfos)
     {
         int yCoordinate = 10;
-        int xCoordinate = 0;
+        float xCoordinate = 0;
         int zCoordinate = 0;
         bool isPositive = true;
         int diceColorIndex = 0;
         int viewXCoordinate = -50;
+        float xCoordinateModifier = 1f;
+
         
         zCoordinate = diceSetInfos.Count;
         _diceSets = new List<DiceSet>();
@@ -97,14 +99,25 @@ public class GameManager : MonoBehaviour {
             currentDiceSet.modifier = diceSetInfo.diceModifier;
             currentDiceSet.diceType = diceSetInfo.diceType;
             currentViewDiceSet.diceType = diceSetInfo.diceType;
+            if (diceSetInfo.diceType == 6)
+            {
+                xCoordinateModifier = 1.3f;
+            }
+            else
+            {
+                xCoordinateModifier = 1.2f;
+            }
+
+
             if (diceSetInfo.numberOfDice < 10)
             {
-                xCoordinate = -1 * (diceSetInfo.numberOfDice / 2);
+                xCoordinate = xCoordinateModifier * (diceSetInfo.numberOfDice / 2);
             }
             else
             {
                 xCoordinate = -8;
             }
+
 
 
             for (int j = 0; j < diceSetInfo.numberOfDice; j++)
@@ -124,13 +137,15 @@ public class GameManager : MonoBehaviour {
                 currentDiceSet.m_Dice.Add(currentDice);
                 currentViewDiceSet.m_Dice.Add(currentViewDice);
                 _totalDiceCount++;
+
+                
                 if (isPositive)
                 {
-                    xCoordinate += 1;
+                    xCoordinate += xCoordinateModifier;
                 }
                 else
                 {
-                    xCoordinate -= 1;
+                    xCoordinate -= xCoordinateModifier;
                 }
 
 
