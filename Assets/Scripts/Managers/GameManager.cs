@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour {
 
             if (diceSetInfo.numberOfDice < 10)
             {
-                xCoordinate = xCoordinateModifier * (diceSetInfo.numberOfDice / 2);
+                xCoordinate = - xCoordinateModifier * (diceSetInfo.numberOfDice / 2);
             }
             else
             {

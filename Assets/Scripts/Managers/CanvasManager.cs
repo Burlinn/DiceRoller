@@ -522,6 +522,15 @@ public class CanvasManager : MonoBehaviour
 
     public void ShowResultsScreen()
     {
+        if (Screen.orientation == ScreenOrientation.Portrait){
+            _btnRight.transform.localPosition = new Vector3(200, -310, 681);
+            _btnLeft.transform.localPosition = new Vector3(-30, -310, 681);
+        }
+        else
+        {
+            _btnRight.transform.localPosition = new Vector3(250, -140, 681);
+            _btnLeft.transform.localPosition = new Vector3(-83, -140, 681);
+        }
         if (_currentResultScreen < 0)
         {
             ShowTotals();
