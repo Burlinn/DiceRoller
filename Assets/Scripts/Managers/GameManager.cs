@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     public float _startDelay;
-    public float _checkDelay;
+    private float _checkDelay;
     public CameraControl _cameraControl;
     public Canvas _messageCanvas;
     public GameObject _diceSelectorPrefab;
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour {
         int diceColorIndex = 0;
         int viewXCoordinate = -50;
         float xCoordinateModifier = 1f;
-
+        int currentZCoordinate = 0;
         
         zCoordinate = diceSetInfos.Count;
         _diceSets = new List<DiceSet>();
@@ -92,13 +92,16 @@ public class GameManager : MonoBehaviour {
             DiceSetInfo diceSetInfo = diceSetInfos[i];
             DiceSet currentDiceSet = new DiceSet();
             DiceSet currentViewDiceSet = new DiceSet();
-            diceColorIndex = UnityEngine.Random.Range(0, 6);
+                       
 
             currentDiceSet.m_Dice = new List<DiceManager>();
             currentViewDiceSet.m_Dice = new List<DiceManager>();
             currentDiceSet.modifier = diceSetInfo.diceModifier;
             currentDiceSet.diceType = diceSetInfo.diceType;
             currentViewDiceSet.diceType = diceSetInfo.diceType;
+
+            diceColorIndex = UnityEngine.Random.Range(0, 6);
+            
             if (diceSetInfo.diceType == 6)
             {
                 xCoordinateModifier = 1.3f;
@@ -119,26 +122,31 @@ public class GameManager : MonoBehaviour {
             }
 
 
-
+            currentZCoordinate = zCoordinate;
             for (int j = 0; j < diceSetInfo.numberOfDice; j++)
             {
                 DiceManager currentDice = new DiceManager();
                 DiceManager currentViewDice = new DiceManager();
                 currentDice = SetDiceType(currentDice, diceSetInfo.diceType);
                 currentViewDice = SetDiceType(currentViewDice, diceSetInfo.diceType);
+                if(diceSetInfo.diceType == 2)
+                {
+                    currentViewDice._instance.gameObject.GetComponent<DiceScript>().SetIsD2(true);
+                    currentDice._instance.gameObject.GetComponent<DiceScript>().SetIsD2(true);
+                }
                 currentViewDice._instance.gameObject.GetComponent<DiceScript>().SetIsRolling(false);
                 currentDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
                 currentViewDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
                 currentDice.RandomizeDice();
 
-                currentDice._instance.transform.position = new Vector3(xCoordinate, yCoordinate, zCoordinate);
-                currentViewDice._instance.transform.position = new Vector3(xCoordinate + viewXCoordinate, yCoordinate, zCoordinate);
+                currentDice._instance.transform.position = new Vector3(xCoordinate, yCoordinate, currentZCoordinate);
+                currentViewDice._instance.transform.position = new Vector3(xCoordinate + viewXCoordinate, yCoordinate, currentZCoordinate);
                 currentViewDice._instance.GetComponent<Rigidbody>().useGravity = false;
                 currentDiceSet.m_Dice.Add(currentDice);
                 currentViewDiceSet.m_Dice.Add(currentViewDice);
                 _totalDiceCount++;
 
-                
+
                 if (isPositive)
                 {
                     xCoordinate += xCoordinateModifier;
@@ -154,18 +162,36 @@ public class GameManager : MonoBehaviour {
                     xCoordinate -= 5;
                     yCoordinate += 4;
                     isPositive = false;
+                    currentZCoordinate -= 1;
                 }
                 if (xCoordinate <= -9)
                 {
                     xCoordinate += 5;
                     yCoordinate += 4;
                     isPositive = true;
+                    currentZCoordinate -= 1;
                 }
 
             }
             zCoordinate -= 2;
             _diceSets.Add(currentDiceSet);
             _viewDiceSets.Add(currentViewDiceSet);
+        }
+        if (_totalDiceCount <= 5)
+        {
+            _checkDelay = .5f;
+        }
+        else if(_totalDiceCount > 5 && _totalDiceCount <= 20)
+        {
+            _checkDelay = 1f;
+        }
+        else if (_totalDiceCount > 20 && _totalDiceCount <= 40)
+        {
+            _checkDelay = 1.5f;
+        }
+        else
+        {
+            _checkDelay = 2f;
         }
         SetCameraTargets();
     }

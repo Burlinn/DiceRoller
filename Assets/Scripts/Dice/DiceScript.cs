@@ -7,7 +7,7 @@ public class DiceScript : MonoBehaviour {
     
     private bool _isRolling = true;
     private Vector3 _randomRotation;
-
+    private bool _isD2 = false;
 
 
 
@@ -21,6 +21,11 @@ public class DiceScript : MonoBehaviour {
         _isRolling = isRolling;
     }
 
+    public void SetIsD2(bool isD2)
+    {
+        _isD2 = isD2;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         _isRolling = false;
@@ -30,7 +35,15 @@ public class DiceScript : MonoBehaviour {
     void Update () {
         if (_isRolling == true)
         {
-            this.gameObject.transform.Rotate(_randomRotation.x * Time.deltaTime, _randomRotation.y * Time.deltaTime, _randomRotation.z * Time.deltaTime);
+            if (_isD2)
+            {
+                this.gameObject.transform.Rotate(_randomRotation.x * Time.deltaTime, _randomRotation.y * Time.deltaTime, 0);
+            }
+            else
+            {
+                this.gameObject.transform.Rotate(_randomRotation.x * Time.deltaTime, _randomRotation.y * Time.deltaTime, _randomRotation.z * Time.deltaTime);
+            }
+            
         }
         
 
