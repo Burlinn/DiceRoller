@@ -12,7 +12,7 @@ public class DiceManager : MonoBehaviour {
     private Vector3 _lastPosition;
     private List<string> _diceColors;
     public GameManager _gameManager;
-
+    private int _rolledValue;
 
 
     // Use this for initialization
@@ -77,6 +77,17 @@ public class DiceManager : MonoBehaviour {
 
     public int GetValue()
     {
+        return _rolledValue;
+    }
+
+    public int SetValue(int value)
+    {
+        _rolledValue = value;
+        return _rolledValue;
+    }
+
+    public int CalculateValue()
+    {
         int selectedValue = 0;
         GameObject values = _instance.transform.Find("Values").gameObject;
         GameObject currentValue;
@@ -90,7 +101,8 @@ public class DiceManager : MonoBehaviour {
                 selectedValue = Convert.ToInt32(currentValue.name);
             }
         }
-       
+
+        _rolledValue = selectedValue;
         return selectedValue;
     }
 

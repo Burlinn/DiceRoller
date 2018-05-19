@@ -51,6 +51,32 @@ public class GameManager : MonoBehaviour {
         return _isTesting;
     }
 
+    public void SortDiceSets()
+    {
+        foreach (DiceSet diceSet in _viewDiceSets)
+        {
+            diceSet._diceManagers = SortDiceManagersList(diceSet._diceManagers);
+        }
+        foreach (DiceSet diceSet in _diceSets)
+        {
+            diceSet._diceManagers = SortDiceManagersList(diceSet._diceManagers);
+        }
+    }
+
+    private List<DiceManager> SortDiceManagersList(List<DiceManager> diceManagers)
+    {
+        for(int i = 0; i < diceManagers.Count; i++)
+        {
+            for (int j = i; j > 0 && diceManagers[j - 1].GetValue() < diceManagers[j].GetValue(); j--)
+            {
+                DiceManager tempDice = diceManagers[j - 1];
+                diceManagers[j - 1] = diceManagers[j];
+                diceManagers[j] = tempDice;
+            }
+        }
+        return diceManagers;
+    }
+
     private void SetCameraTargets()
     {
         Transform[] targets = new Transform[_totalDiceCount];
@@ -58,7 +84,7 @@ public class GameManager : MonoBehaviour {
 
         for (int i = 0; i < _diceSets.Count; i++)
         {
-            List<DiceManager> currentDice = _diceSets[i].m_Dice;
+            List<DiceManager> currentDice = _diceSets[i]._diceManagers;
             for(int j = 0; j < currentDice.Count; j++)
             {
                 targets[currentCount] = currentDice[j]._instance.transform;
@@ -94,15 +120,15 @@ public class GameManager : MonoBehaviour {
             DiceSet currentViewDiceSet = new DiceSet();
                        
 
-            currentDiceSet.m_Dice = new List<DiceManager>();
-            currentViewDiceSet.m_Dice = new List<DiceManager>();
-            currentDiceSet.modifier = diceSetInfo.diceModifier;
-            currentDiceSet.diceType = diceSetInfo.diceType;
-            currentViewDiceSet.diceType = diceSetInfo.diceType;
+            currentDiceSet._diceManagers = new List<DiceManager>();
+            currentViewDiceSet._diceManagers = new List<DiceManager>();
+            currentDiceSet._modifier = diceSetInfo._diceModifier;
+            currentDiceSet._diceType = diceSetInfo._diceType;
+            currentViewDiceSet._diceType = diceSetInfo._diceType;
 
             diceColorIndex = UnityEngine.Random.Range(0, 6);
             
-            if (diceSetInfo.diceType == 6)
+            if (diceSetInfo._diceType == 6)
             {
                 xCoordinateModifier = 1.3f;
             }
@@ -112,9 +138,9 @@ public class GameManager : MonoBehaviour {
             }
 
 
-            if (diceSetInfo.numberOfDice < 10)
+            if (diceSetInfo._numberOfDice < 10)
             {
-                xCoordinate = - xCoordinateModifier * (diceSetInfo.numberOfDice / 2);
+                xCoordinate = - xCoordinateModifier * (diceSetInfo._numberOfDice / 2);
             }
             else
             {
@@ -123,27 +149,27 @@ public class GameManager : MonoBehaviour {
 
 
             currentZCoordinate = zCoordinate;
-            for (int j = 0; j < diceSetInfo.numberOfDice; j++)
+            for (int j = 0; j < diceSetInfo._numberOfDice; j++)
             {
                 DiceManager currentDice = new DiceManager();
                 DiceManager currentViewDice = new DiceManager();
-                currentDice = SetDiceType(currentDice, diceSetInfo.diceType);
-                currentViewDice = SetDiceType(currentViewDice, diceSetInfo.diceType);
-                if(diceSetInfo.diceType == 2)
+                currentDice = SetDiceType(currentDice, diceSetInfo._diceType);
+                currentViewDice = SetDiceType(currentViewDice, diceSetInfo._diceType);
+                if(diceSetInfo._diceType == 2)
                 {
                     currentViewDice._instance.gameObject.GetComponent<DiceScript>().SetIsD2(true);
                     currentDice._instance.gameObject.GetComponent<DiceScript>().SetIsD2(true);
                 }
                 currentViewDice._instance.gameObject.GetComponent<DiceScript>().SetIsRolling(false);
-                currentDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
-                currentViewDice.SetTexture(diceSetInfo.diceType, diceColorIndex);
+                currentDice.SetTexture(diceSetInfo._diceType, diceColorIndex);
+                currentViewDice.SetTexture(diceSetInfo._diceType, diceColorIndex);
                 currentDice.RandomizeDice();
 
                 currentDice._instance.transform.position = new Vector3(xCoordinate, yCoordinate, currentZCoordinate);
                 currentViewDice._instance.transform.position = new Vector3(xCoordinate + viewXCoordinate, yCoordinate, currentZCoordinate);
                 currentViewDice._instance.GetComponent<Rigidbody>().useGravity = false;
-                currentDiceSet.m_Dice.Add(currentDice);
-                currentViewDiceSet.m_Dice.Add(currentViewDice);
+                currentDiceSet._diceManagers.Add(currentDice);
+                currentViewDiceSet._diceManagers.Add(currentViewDice);
                 _totalDiceCount++;
 
 
@@ -220,7 +246,7 @@ public class GameManager : MonoBehaviour {
         {
             foreach (DiceSet diceSet in _diceSets)
             {
-                foreach(DiceManager dice in diceSet.m_Dice)
+                foreach(DiceManager dice in diceSet._diceManagers)
                 {
                     Destroy(dice._instance.gameObject);
                 }
@@ -231,7 +257,7 @@ public class GameManager : MonoBehaviour {
         {
             foreach (DiceSet diceSet in _viewDiceSets)
             {
-                foreach (DiceManager dice in diceSet.m_Dice)
+                foreach (DiceManager dice in diceSet._diceManagers)
                 {
                     Destroy(dice._instance.gameObject);
                 }
@@ -286,12 +312,9 @@ public class GameManager : MonoBehaviour {
     void Update () {
         if(_diceSets != null && _isTesting == false) { 
             _doneRolling = IsDoneRolling();
-      
-            if (_doneRolling == true && _cameraControl.GetAtDefaultPosition() == true)
+
+            if (_doneRolling == true)
             {
-                GetTotals();
-            }
-            else if(_doneRolling == true){
                 _cameraControl.SetMoveToDefault(true);
             }
   
@@ -305,9 +328,9 @@ public class GameManager : MonoBehaviour {
             for (int i = 0; i < _diceSets.Count; i++)
             {
                 DiceSet currentDiceSet = _diceSets[i];
-                for (int j = 0; j < currentDiceSet.m_Dice.Count; j++)
+                for (int j = 0; j < currentDiceSet._diceManagers.Count; j++)
                 {
-                    DiceManager currentDice = currentDiceSet.m_Dice[j];
+                    DiceManager currentDice = currentDiceSet._diceManagers[j];
                     if (currentDice.GetIsMoving() == false)
                     {
                         noMovement = true;
@@ -352,33 +375,33 @@ public class GameManager : MonoBehaviour {
         {
             diceSetTotal = 0;
             DiceSet currentDiceSet = _diceSets[i];
-            for (int j = 0; j < currentDiceSet.m_Dice.Count; j++)
+            DiceSet currentViewSet = _viewDiceSets[i];
+            for (int j = 0; j < currentDiceSet._diceManagers.Count; j++)
             {
-                DiceManager currentDice = currentDiceSet.m_Dice[j];
-                diceSetTotal += currentDice.GetValue();
+                DiceManager currentDice = currentDiceSet._diceManagers[j];
+                diceSetTotal += currentDice.CalculateValue();
+                currentViewSet._diceManagers[j].SetValue(currentDice.GetValue());
             }
-            diceSetTotal += currentDiceSet.modifier;
-            currentDiceSet.total = diceSetTotal;
+            diceSetTotal += currentDiceSet._modifier;
+            currentDiceSet._total = diceSetTotal;
             _diceSets[i] = currentDiceSet;
         }
     }
-
-
-
+    
 
 }
 
 public class DiceSetInfo
 {
-    public int numberOfDice;
-    public int diceType;
-    public int diceModifier;
+    public int _numberOfDice;
+    public int _diceType;
+    public int _diceModifier;
 }
 
 public class DiceSet
 {
-    public List<DiceManager> m_Dice;
-    public int modifier;
-    public int diceType;
-    public int total;
+    public List<DiceManager> _diceManagers;
+    public int _modifier;
+    public int _diceType;
+    public int _total;
 }

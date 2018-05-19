@@ -302,24 +302,24 @@ public class CanvasManager : MonoBehaviour
 
             if (txtDiceCount.transform.Find("Text").GetComponent<Text>().text == "")
             {
-                currentDiceSetInfo.numberOfDice = 1;
+                currentDiceSetInfo._numberOfDice = 1;
             }
             else
             {
-                currentDiceSetInfo.numberOfDice = Convert.ToInt32(txtDiceCount.transform.Find("Text").GetComponent<Text>().text);
+                currentDiceSetInfo._numberOfDice = Convert.ToInt32(txtDiceCount.transform.Find("Text").GetComponent<Text>().text);
             }
             
             if (txtModifier.transform.Find("Text").GetComponent<Text>().text == "")
             {
-                currentDiceSetInfo.diceModifier = 0;
+                currentDiceSetInfo._diceModifier = 0;
             }
             else
             {
-                currentDiceSetInfo.diceModifier = Convert.ToInt32(txtModifier.transform.Find("Text").GetComponent<Text>().text);
+                currentDiceSetInfo._diceModifier = Convert.ToInt32(txtModifier.transform.Find("Text").GetComponent<Text>().text);
             }
 
             selectedDiceTypeValue = Convert.ToInt32(ddlDiceSelector.GetComponent<Dropdown>().value);
-            currentDiceSetInfo.diceType = Convert.ToInt32(ddlDiceSelector.GetComponent<Dropdown>().options[selectedDiceTypeValue].text);
+            currentDiceSetInfo._diceType = Convert.ToInt32(ddlDiceSelector.GetComponent<Dropdown>().options[selectedDiceTypeValue].text);
             diceSetInfos.Add(currentDiceSetInfo);
 
         }
@@ -334,9 +334,9 @@ public class CanvasManager : MonoBehaviour
         List<DiceSetInfo> diceSetInfos = new List<DiceSetInfo>();
         DiceSetInfo currentDiceSetInfo = new DiceSetInfo();
 
-        currentDiceSetInfo.diceType = 20;
-        currentDiceSetInfo.diceModifier = 0;
-        currentDiceSetInfo.numberOfDice = 1;
+        currentDiceSetInfo._diceType = 20;
+        currentDiceSetInfo._diceModifier = 0;
+        currentDiceSetInfo._numberOfDice = 1;
 
         diceSetInfos.Add(currentDiceSetInfo);
 
@@ -352,16 +352,16 @@ public class CanvasManager : MonoBehaviour
         List<DiceSetInfo> diceSetInfos = new List<DiceSetInfo>();
         DiceSetInfo currentDiceSetInfo = new DiceSetInfo();
 
-        currentDiceSetInfo.diceType = 10;
-        currentDiceSetInfo.diceModifier = 0;
-        currentDiceSetInfo.numberOfDice = 1;
+        currentDiceSetInfo._diceType = 10;
+        currentDiceSetInfo._diceModifier = 0;
+        currentDiceSetInfo._numberOfDice = 1;
 
         diceSetInfos.Add(currentDiceSetInfo);
 
         currentDiceSetInfo = new DiceSetInfo();
-        currentDiceSetInfo.diceType = 100;
-        currentDiceSetInfo.diceModifier = 0;
-        currentDiceSetInfo.numberOfDice = 1;
+        currentDiceSetInfo._diceType = 100;
+        currentDiceSetInfo._diceModifier = 0;
+        currentDiceSetInfo._numberOfDice = 1;
 
         diceSetInfos.Add(currentDiceSetInfo);
 
@@ -378,9 +378,9 @@ public class CanvasManager : MonoBehaviour
         List<DiceSetInfo> diceSetInfos = new List<DiceSetInfo>();
         DiceSetInfo currentDiceSetInfo = new DiceSetInfo();
 
-        currentDiceSetInfo.diceType = 2;
-        currentDiceSetInfo.diceModifier = 0;
-        currentDiceSetInfo.numberOfDice = 1;
+        currentDiceSetInfo._diceType = 2;
+        currentDiceSetInfo._diceModifier = 0;
+        currentDiceSetInfo._numberOfDice = 1;
 
         diceSetInfos.Add(currentDiceSetInfo);
 
@@ -510,9 +510,9 @@ public class CanvasManager : MonoBehaviour
         if (_currentResultScreen >= 0)
         {
             diceSet = _gameManager.GetDiceSets()[_currentResultScreen];
-            diceList = diceSet.m_Dice;
+            diceList = diceSet._diceManagers;
             viewDiceSets = _gameManager.GetViewDiceSets()[_currentResultScreen];
-            viewDiceList = viewDiceSets.m_Dice;
+            viewDiceList = viewDiceSets._diceManagers;
             for (int i = 0; i < diceList.Count; i++)
             {
 
@@ -549,6 +549,7 @@ public class CanvasManager : MonoBehaviour
     private void ShowTotals()
     {
         _gameManager.GetTotals();
+        _gameManager.SortDiceSets();
         List<DiceSet> diceSets = _gameManager.GetDiceSets();
         _selectionScreen.SetActive(true);
 
@@ -560,7 +561,7 @@ public class CanvasManager : MonoBehaviour
             diceSelector.transform.Find("btnAddNew").gameObject.SetActive(false);
             diceSelector.transform.Find("btnRemove").gameObject.SetActive(false);
             diceSelector.transform.Find("lblTotal").gameObject.SetActive(true);
-            diceSelector.transform.Find("lblTotal").GetComponent<Text>().text = "= " + currentDiceSet.total;
+            diceSelector.transform.Find("lblTotal").GetComponent<Text>().text = "= " + currentDiceSet._total;
             diceSelector.transform.Find("txtDiceCount").gameObject.GetComponent<InputField>().enabled = false;
             diceSelector.transform.Find("txtModifier").gameObject.GetComponent<InputField>().enabled = false;
             diceSelector.transform.Find("ddlDiceSelector").gameObject.GetComponent<Dropdown>().enabled = false;
@@ -581,9 +582,9 @@ public class CanvasManager : MonoBehaviour
         _diceView.gameObject.SetActive(true);
 
         DiceSet diceSet = _gameManager.GetDiceSets()[_currentResultScreen];
-        List<DiceManager> diceList = diceSet.m_Dice;
+        List<DiceManager> diceList = diceSet._diceManagers;
         DiceSet viewDiceSets = _gameManager.GetViewDiceSets()[_currentResultScreen];
-        List<DiceManager> viewDiceList = viewDiceSets.m_Dice;
+        List<DiceManager> viewDiceList = viewDiceSets._diceManagers;
         List<GameObject> dicePanels = GameObject.FindGameObjectsWithTag("DicePanel").ToList();
 
         for (int i = 0; i < diceList.Count; i++)
@@ -628,8 +629,8 @@ public class CanvasManager : MonoBehaviour
             {
                 diceSet = diceSets[i];
                 viewDiceSet = viewDiceSets[i];
-                diceList = diceSet.m_Dice;
-                viewDiceList = viewDiceSet.m_Dice;
+                diceList = diceSet._diceManagers;
+                viewDiceList = viewDiceSet._diceManagers;
                 for (int j = 0; j < diceList.Count; j++)
                 {
 
@@ -638,7 +639,7 @@ public class CanvasManager : MonoBehaviour
                     viewDiceList[j]._instance.transform.rotation = diceList[j]._instance.transform.rotation;
                     viewDiceList[j]._instance.GetComponent<MeshCollider>().enabled = false;
                     viewDiceList[j]._instance.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                    switch (viewDiceSet.diceType)
+                    switch (viewDiceSet._diceType)
                     {
                         case 4:
                             viewDiceList[j]._instance.transform.localScale = new Vector3(100, 100, 100);
@@ -656,7 +657,7 @@ public class CanvasManager : MonoBehaviour
                     
                     viewDiceList[j]._instance.transform.position = new Vector3(viewDiceList[j]._instance.transform.position.x + .25f, viewDiceList[j]._instance.transform.position.y + .25f, viewDiceList[j]._instance.transform.position.z);
 
-                    if (viewDiceSet.diceType != 4)
+                    if (viewDiceSet._diceType != 4)
                     {
                         viewDiceList[j]._instance.transform.Rotate(new Vector3(-45, 0, 0), Space.World);
                     }
@@ -681,19 +682,19 @@ public class CanvasManager : MonoBehaviour
 
         if (_selection == "RollD20")
         {
-            results = diceSets[0].total.ToString();
+            results = diceSets[0]._total.ToString();
         }
         if (_selection == "RollD100")
         {
-            results = (diceSets[0].total + diceSets[1].total).ToString();
+            results = (diceSets[0]._total + diceSets[1]._total).ToString();
         }
         else if (_selection == "RollCoin")
         {
-            if (diceSets[0].total == 1)
+            if (diceSets[0]._total == 1)
             {
                 results = "Heads";
             }
-            else if (diceSets[0].total == 2)
+            else if (diceSets[0]._total == 2)
             {
                 results = "Tails";
             }

@@ -68,11 +68,11 @@ public class TestManager : MonoBehaviour {
         {
             currentDiceSetInfo = new DiceSetInfo();
 
-            currentDiceSetInfo.numberOfDice = 8;
+            currentDiceSetInfo._numberOfDice = 8;
 
-            currentDiceSetInfo.diceModifier = 0;
+            currentDiceSetInfo._diceModifier = 0;
 
-            currentDiceSetInfo.diceType = 20;
+            currentDiceSetInfo._diceType = 20;
             diceSetInfos.Add(currentDiceSetInfo);
 
 
@@ -87,9 +87,9 @@ public class TestManager : MonoBehaviour {
         for (int i = 0; i < _gameManager.GetDiceSets().Count; i++)
         {
             DiceSet currentDiceSet = _gameManager.GetDiceSets()[i];
-            for (int j = 0; j < currentDiceSet.m_Dice.Count; j++)
+            for (int j = 0; j < currentDiceSet._diceManagers.Count; j++)
             {
-                DiceManager currentDice = currentDiceSet.m_Dice[j];
+                DiceManager currentDice = currentDiceSet._diceManagers[j];
                 currentValue = currentDice.GetValue();
                 _testItems[currentValue] = _testItems[currentValue] + 1;
             }
