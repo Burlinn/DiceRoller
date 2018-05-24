@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    public float _startDelay;
+    #region Global Variables
+
     private float _checkDelay;
     public CameraControl _cameraControl;
     public Canvas _messageCanvas;
@@ -21,35 +22,142 @@ public class GameManager : MonoBehaviour {
     public int _diceSelectionAdjustment;
     public bool _isTesting = false;
 
-    private WaitForSeconds _startWait;
     private List<DiceSet> _diceSets;
     private List<DiceSet> _viewDiceSets;
-    private bool _doneRolling = false;
+    private bool _doneRolling = true;
     private bool _checkRollingAgain = true;
     private int _totalDiceCount;
 
+    #endregion
+
+    #region Generic
 
     // Use this for initialization
-    void Start () {
-        
-        if (_isTesting == false)
-        {
-            _startWait = new WaitForSeconds(_startDelay);
-        }
-        Screen.orientation = ScreenOrientation.Portrait;
-        
-
-    }
-
-    private void GameLoop()
+    void Start()
     {
 
+        Screen.orientation = ScreenOrientation.Portrait;
+
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (_diceSets != null && _isTesting == false && _doneRolling == false)
+        {
+            _doneRolling = IsDoneRolling();
+
+            if (_doneRolling == true)
+            {
+                _cameraControl.SetMoveToDefault(true);
+            }
+
+        }
+    }
+
+    #endregion
+
+    #region Getters & Setters
 
     public bool GetIsTesting()
     {
         return _isTesting;
     }
+
+    public List<DiceSet> GetDiceSets()
+    {
+        return _diceSets;
+    }
+
+    public List<DiceSet> GetViewDiceSets()
+    {
+        return _viewDiceSets;
+    }
+
+    public bool GetDoneRollingAndCameraDefaulted()
+    {
+        return _doneRolling && _cameraControl.GetAtDefaultPosition();
+    }
+
+    public void GetTotals()
+    {
+        int diceSetTotal = 0;
+        for (int i = 0; i < _diceSets.Count; i++)
+        {
+            diceSetTotal = 0;
+            DiceSet currentDiceSet = _diceSets[i];
+            DiceSet currentViewSet = _viewDiceSets[i];
+            for (int j = 0; j < currentDiceSet._diceManagers.Count; j++)
+            {
+                DiceManager currentDice = currentDiceSet._diceManagers[j];
+                diceSetTotal += currentDice.CalculateValue();
+                currentViewSet._diceManagers[j].SetValue(currentDice.GetValue());
+            }
+            diceSetTotal += currentDiceSet._modifier;
+            currentDiceSet._total = diceSetTotal;
+            _diceSets[i] = currentDiceSet;
+        }
+    }
+
+
+    private void SetCameraTargets()
+    {
+        Transform[] targets = new Transform[_totalDiceCount];
+        int currentCount = 0;
+
+        for (int i = 0; i < _diceSets.Count; i++)
+        {
+            List<DiceManager> currentDice = _diceSets[i]._diceManagers;
+            for (int j = 0; j < currentDice.Count; j++)
+            {
+                targets[currentCount] = currentDice[j]._instance.transform;
+                currentCount += 1;
+            }
+
+        }
+
+        _cameraControl._targets = targets;
+        _cameraControl.SetMoveToDefault(false);
+    }
+
+    public DiceManager SetDiceType(DiceManager dice, int diceType)
+    {
+        switch (diceType)
+        {
+            case 2:
+                dice._instance = GameObject.Instantiate(_d2Prefab);
+                break;
+            case 4:
+                dice._instance = GameObject.Instantiate(_d4Prefab);
+                break;
+            case 6:
+                dice._instance = GameObject.Instantiate(_d6Prefab);
+                break;
+            case 8:
+                dice._instance = GameObject.Instantiate(_d8Prefab);
+                break;
+            case 10:
+                dice._instance = GameObject.Instantiate(_d10Prefab);
+                break;
+            case 12:
+                dice._instance = GameObject.Instantiate(_d12Prefab);
+                break;
+            case 20:
+                dice._instance = GameObject.Instantiate(_d20Prefab);
+                break;
+            case 100:
+                dice._instance = GameObject.Instantiate(_d100Prefab);
+                break;
+        }
+        return dice;
+    }
+
+
+    #endregion
+
+
+    #region Helpers
+
 
     public void SortDiceSets()
     {
@@ -65,7 +173,7 @@ public class GameManager : MonoBehaviour {
 
     private List<DiceManager> SortDiceManagersList(List<DiceManager> diceManagers)
     {
-        for(int i = 0; i < diceManagers.Count; i++)
+        for (int i = 0; i < diceManagers.Count; i++)
         {
             for (int j = i; j > 0 && diceManagers[j - 1].GetValue() < diceManagers[j].GetValue(); j--)
             {
@@ -77,25 +185,6 @@ public class GameManager : MonoBehaviour {
         return diceManagers;
     }
 
-    private void SetCameraTargets()
-    {
-        Transform[] targets = new Transform[_totalDiceCount];
-        int currentCount = 0;
-
-        for (int i = 0; i < _diceSets.Count; i++)
-        {
-            List<DiceManager> currentDice = _diceSets[i]._diceManagers;
-            for(int j = 0; j < currentDice.Count; j++)
-            {
-                targets[currentCount] = currentDice[j]._instance.transform;
-                currentCount += 1;
-            }
-            
-        }
-
-        _cameraControl._targets = targets;
-        _cameraControl.SetMoveToDefault(false);
-    }
 
     public void RollDice(List<DiceSetInfo> diceSetInfos)
     {
@@ -107,7 +196,7 @@ public class GameManager : MonoBehaviour {
         int viewXCoordinate = -50;
         float xCoordinateModifier = 1f;
         int currentZCoordinate = 0;
-        
+
         zCoordinate = diceSetInfos.Count;
         _diceSets = new List<DiceSet>();
         _viewDiceSets = new List<DiceSet>();
@@ -118,7 +207,7 @@ public class GameManager : MonoBehaviour {
             DiceSetInfo diceSetInfo = diceSetInfos[i];
             DiceSet currentDiceSet = new DiceSet();
             DiceSet currentViewDiceSet = new DiceSet();
-                       
+
 
             currentDiceSet._diceManagers = new List<DiceManager>();
             currentViewDiceSet._diceManagers = new List<DiceManager>();
@@ -127,7 +216,7 @@ public class GameManager : MonoBehaviour {
             currentViewDiceSet._diceType = diceSetInfo._diceType;
 
             diceColorIndex = UnityEngine.Random.Range(0, 6);
-            
+
             if (diceSetInfo._diceType == 6)
             {
                 xCoordinateModifier = 1.3f;
@@ -140,7 +229,7 @@ public class GameManager : MonoBehaviour {
 
             if (diceSetInfo._numberOfDice < 10)
             {
-                xCoordinate = - xCoordinateModifier * (diceSetInfo._numberOfDice / 2);
+                xCoordinate = -xCoordinateModifier * (diceSetInfo._numberOfDice / 2);
             }
             else
             {
@@ -155,7 +244,7 @@ public class GameManager : MonoBehaviour {
                 DiceManager currentViewDice = new DiceManager();
                 currentDice = SetDiceType(currentDice, diceSetInfo._diceType);
                 currentViewDice = SetDiceType(currentViewDice, diceSetInfo._diceType);
-                if(diceSetInfo._diceType == 2)
+                if (diceSetInfo._diceType == 2)
                 {
                     currentViewDice._instance.gameObject.GetComponent<DiceScript>().SetIsD2(true);
                     currentDice._instance.gameObject.GetComponent<DiceScript>().SetIsD2(true);
@@ -207,7 +296,7 @@ public class GameManager : MonoBehaviour {
         {
             _checkDelay = .5f;
         }
-        else if(_totalDiceCount > 5 && _totalDiceCount <= 20)
+        else if (_totalDiceCount > 5 && _totalDiceCount <= 20)
         {
             _checkDelay = 1f;
         }
@@ -220,18 +309,9 @@ public class GameManager : MonoBehaviour {
             _checkDelay = 2f;
         }
         SetCameraTargets();
+        _doneRolling = false;
     }
 
-
-    public List<DiceSet> GetDiceSets()
-    {
-        return _diceSets;
-    }
-
-    public List<DiceSet> GetViewDiceSets()
-    {
-        return _viewDiceSets;
-    }
     
     IEnumerator ResetCheckAgain()
     {
@@ -242,18 +322,18 @@ public class GameManager : MonoBehaviour {
 
     public void DestroyDice()
     {
-        if(_diceSets != null)
+        if (_diceSets != null)
         {
             foreach (DiceSet diceSet in _diceSets)
             {
-                foreach(DiceManager dice in diceSet._diceManagers)
+                foreach (DiceManager dice in diceSet._diceManagers)
                 {
                     Destroy(dice._instance.gameObject);
                 }
             }
             _diceSets.Clear();
         }
-        if(_viewDiceSets != null)
+        if (_viewDiceSets != null)
         {
             foreach (DiceSet diceSet in _viewDiceSets)
             {
@@ -272,59 +352,13 @@ public class GameManager : MonoBehaviour {
         _totalDiceCount = 0;
 
     }
-
     
-
-
-    public DiceManager SetDiceType(DiceManager dice, int diceType)
-    {
-        switch (diceType)
-        {
-            case 2:
-                dice._instance = GameObject.Instantiate(_d2Prefab);
-                break;
-            case 4:
-                dice._instance = GameObject.Instantiate(_d4Prefab);
-                break;
-            case 6:
-                dice._instance = GameObject.Instantiate(_d6Prefab);
-                break;
-            case 8:
-                dice._instance = GameObject.Instantiate(_d8Prefab);
-                break;
-            case 10:
-                dice._instance = GameObject.Instantiate(_d10Prefab);
-                break;
-            case 12:
-                dice._instance = GameObject.Instantiate(_d12Prefab);
-                break;
-            case 20:
-                dice._instance = GameObject.Instantiate(_d20Prefab);
-                break;
-            case 100:
-                dice._instance = GameObject.Instantiate(_d100Prefab);
-                break;
-        }
-        return dice;
-    }
-
-    // Update is called once per frame
-    void Update () {
-        if(_diceSets != null && _isTesting == false) { 
-            _doneRolling = IsDoneRolling();
-
-            if (_doneRolling == true)
-            {
-                _cameraControl.SetMoveToDefault(true);
-            }
-  
-        }
-    }
 
     public bool IsDoneRolling()
     {
         bool noMovement = false;
-        if( _checkRollingAgain == true) { 
+        if (_checkRollingAgain == true)
+        {
             for (int i = 0; i < _diceSets.Count; i++)
             {
                 DiceSet currentDiceSet = _diceSets[i];
@@ -349,47 +383,13 @@ public class GameManager : MonoBehaviour {
         }
         return noMovement;
     }
-
-    public bool GetDoneRolling()
-    {
-        return _doneRolling;
-    }
-
-    public bool GetDoneRollingAndCameraDefaulted()
-    {
-        return _doneRolling && _cameraControl.GetAtDefaultPosition();
-    }
-
-
-    public void SetDoneRolling(bool doneRolling)
-    {
-        _doneRolling = doneRolling;
-    }
-
-
-
-    public void GetTotals()
-    {
-        int diceSetTotal = 0;
-        for (int i = 0; i < _diceSets.Count; i++)
-        {
-            diceSetTotal = 0;
-            DiceSet currentDiceSet = _diceSets[i];
-            DiceSet currentViewSet = _viewDiceSets[i];
-            for (int j = 0; j < currentDiceSet._diceManagers.Count; j++)
-            {
-                DiceManager currentDice = currentDiceSet._diceManagers[j];
-                diceSetTotal += currentDice.CalculateValue();
-                currentViewSet._diceManagers[j].SetValue(currentDice.GetValue());
-            }
-            diceSetTotal += currentDiceSet._modifier;
-            currentDiceSet._total = diceSetTotal;
-            _diceSets[i] = currentDiceSet;
-        }
-    }
     
 
+    #endregion
+    
 }
+
+#region Helper Classes
 
 public class DiceSetInfo
 {
@@ -405,3 +405,5 @@ public class DiceSet
     public int _diceType;
     public int _total;
 }
+
+#endregion

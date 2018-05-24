@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class DiceManager : MonoBehaviour {
 
+    #region Global Variables
+
     [HideInInspector]
     public GameObject[] _values;
     [HideInInspector]
@@ -14,11 +16,85 @@ public class DiceManager : MonoBehaviour {
     public GameManager _gameManager;
     private int _rolledValue;
 
+    #endregion
+
+    #region Generic
 
     // Use this for initialization
-    void Start() {
-       
+    void Start()
+    {
+
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+
+    }
+
+    #endregion
+
+    #region Getters & Setters
+
+    public void SetTexture(int diceType, int diceColorIndex)
+    {
+
+        string diceColor;
+        string path;
+        Texture texture;
+
+        if (_diceColors == null)
+        {
+            SetUpColors();
+        }
+        diceColor = _diceColors[diceColorIndex];
+        if (diceType == 2)
+        {
+            path = "Dice_Textures/D" + diceType + "/D" + diceType + "_Texture";
+        }
+        else
+        {
+            path = "Dice_Textures/D" + diceType + "/D" + diceType + "_Texture_" + diceColor;
+        }
+
+        texture = Resources.Load(path, typeof(Texture)) as Texture;
+
+        _instance.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
+
+    }
+
+    public int GetValue()
+    {
+        return _rolledValue;
+    }
+
+    public int SetValue(int value)
+    {
+        _rolledValue = value;
+        return _rolledValue;
+    }
+
+    public bool GetIsMoving()
+    {
+        bool isMoving = true;
+        Vector3 currentPosition = _instance.transform.position;
+        if (currentPosition.ToString() == _lastPosition.ToString())
+        {
+            isMoving = false;
+        }
+        else
+        {
+            isMoving = true;
+        }
+        _lastPosition = currentPosition;
+
+        return isMoving;
+    }
+
+    #endregion
+
+    #region Helpers
 
     private void SetUpColors()
     {
@@ -36,32 +112,7 @@ public class DiceManager : MonoBehaviour {
         _instance.transform.rotation = Quaternion.LookRotation(UnityEngine.Random.onUnitSphere, UnityEngine.Random.onUnitSphere);
     }
 
-    public void SetTexture(int diceType, int diceColorIndex)
-    {
-
-        string diceColor;
-        string path;
-        Texture texture;
-
-        if (_diceColors == null)
-        {
-            SetUpColors();
-        }
-        diceColor = _diceColors[diceColorIndex];
-        if(diceType == 2)
-        {
-            path = "Dice_Textures/D" + diceType + "/D" + diceType + "_Texture";
-        }
-        else
-        {
-            path = "Dice_Textures/D" + diceType + "/D" + diceType + "_Texture_" + diceColor;
-        }
-        
-        texture = Resources.Load(path, typeof(Texture)) as Texture;
-
-        _instance.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
-
-    }
+  
 
     public DiceManager CopyDiceForView(DiceManager dice)
     {
@@ -75,16 +126,7 @@ public class DiceManager : MonoBehaviour {
         _instance.transform.rotation = Quaternion.Euler(270, 270, 270);
     }
 
-    public int GetValue()
-    {
-        return _rolledValue;
-    }
-
-    public int SetValue(int value)
-    {
-        _rolledValue = value;
-        return _rolledValue;
-    }
+  
 
     public int CalculateValue()
     {
@@ -106,27 +148,12 @@ public class DiceManager : MonoBehaviour {
         return selectedValue;
     }
 
-    public bool GetIsMoving()
-    {
-        bool isMoving = true;
-        Vector3 currentPosition = _instance.transform.position;
-        if (currentPosition.ToString() == _lastPosition.ToString())
-        {
-            isMoving = false;
-        }
-        else
-        {
-            isMoving = true;
-        }
-        _lastPosition = currentPosition;
-        
-        return isMoving;
-    }
+   
 
 
-    // Update is called once per frame
-    void Update () {
-         
+    #endregion
 
-    }
+
+
+
 }

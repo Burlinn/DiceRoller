@@ -4127,7 +4127,7 @@ GameObject:
   - component: {fileID: 641100141}
   - component: {fileID: 641100140}
   m_Layer: 5
-  m_Name: DiceSelection
+  m_Name: lblDiceSelection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6652,7 +6652,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdebc4776b502884a9bb932b95b5a154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startDelay: 2
   _cameraControl: {fileID: 840496281}
   _messageCanvas: {fileID: 974809126}
   _diceSelectorPrefab: {fileID: 1642643098944384, guid: 3bee133113d7e5849bbbbd91a6bcb66e,
@@ -9235,12 +9234,12 @@ GameObject:
   - component: {fileID: 1491604429}
   - component: {fileID: 1491604428}
   m_Layer: 5
-  m_Name: DiceSelection
+  m_Name: lblDiceSelectionTotal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1491604427
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9297,15 +9296,15 @@ MonoBehaviour:
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
-    m_MaxSize: 60
+    m_MinSize: 0
+    m_MaxSize: 200
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Roll Play
+  m_Text: RollPlay
 --- !u!222 &1491604430
 CanvasRenderer:
   m_ObjectHideFlags: 0

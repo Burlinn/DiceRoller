@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
+    #region Global Variables
+
     public float _dampTime = 0.2f;                 
     public float _screenEdgeBuffer = 4f;           
     public float _minSize = 4f;
@@ -21,20 +23,14 @@ public class CameraControl : MonoBehaviour
     private Vector3 _defaultPosition;
     private bool _atDefaultPosition = true;
 
+    #endregion
+
+    #region Generic
+
     private void Awake()
     {
         _camera = GetComponentInChildren<Camera>();
         _defaultPosition = new Vector3(_defaultX, _defaultY, _defaultZ);
-    }
-
-    public bool GetAtDefaultPosition()
-    {
-        return _atDefaultPosition;
-    }
-    
-    public void SetMoveToDefault(bool moveToDefault)
-    {
-        _moveToDefault = moveToDefault;
     }
 
     private void FixedUpdate()
@@ -52,11 +48,41 @@ public class CameraControl : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Getters & Setters
+
+    public bool GetAtDefaultPosition()
+    {
+        return _atDefaultPosition;
+    }
+
+    public void SetMoveToDefault(bool moveToDefault)
+    {
+        _moveToDefault = moveToDefault;
+    }
+
+
+
     IEnumerator SetAtDefaultPositionAfterResize()
     {
         yield return new WaitForSeconds(_dampTime);
         _atDefaultPosition = true;
     }
+
+    public void SetStartPositionAndSize()
+    {
+        FindAveragePosition();
+
+        transform.position = _desiredPosition;
+
+        _camera.orthographicSize = FindRequiredSize();
+    }
+
+    #endregion
+
+    #region Helpers
+
 
     private void Move()
     {
@@ -90,7 +116,7 @@ public class CameraControl : MonoBehaviour
         {
             averagePos /= numTargets;
         }
-      
+
         averagePos.z = transform.position.z; ;
         averagePos.y = transform.position.y;
 
@@ -128,11 +154,11 @@ public class CameraControl : MonoBehaviour
 
             Vector3 desiredPosToTarget = targetLocalPos - desiredLocalPos;
 
-            size = Mathf.Max (size, Mathf.Abs (desiredPosToTarget.y));
+            size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.y));
 
-            size = Mathf.Max (size, Mathf.Abs (desiredPosToTarget.x) / _camera.aspect);
+            size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.x) / _camera.aspect);
         }
-        
+
         size += _screenEdgeBuffer;
 
         size = Mathf.Max(size, _minSize);
@@ -144,14 +170,9 @@ public class CameraControl : MonoBehaviour
 
         return size;
     }
+    
+
+    #endregion
 
 
-    public void SetStartPositionAndSize()
-    {
-        FindAveragePosition();
-
-        transform.position = _desiredPosition;
-
-        _camera.orthographicSize = FindRequiredSize();
-    }
 }

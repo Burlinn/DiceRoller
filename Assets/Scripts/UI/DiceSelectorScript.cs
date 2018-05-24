@@ -2,21 +2,27 @@ using UnityEngine;
 
 public class DiceSelectorScript : MonoBehaviour
 {
-    private int _diceSelectorId = 0;  
+    #region Global Variables
 
-  
+    private int _diceSelectorId = 0;
 
+    #endregion
+
+    #region Generic
 
     private void Start()
     {
-        
-    }
 
+    }
 
     private void Update()
     {
-        
+
     }
+
+    #endregion
+
+    #region Getters & Setters
 
     public int SetDiceSelectorId(int diceSelectorId)
     {
@@ -28,4 +34,6 @@ public class DiceSelectorScript : MonoBehaviour
     {
         return _diceSelectorId;
     }
+
+    #endregion
 }

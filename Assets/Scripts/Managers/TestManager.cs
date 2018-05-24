@@ -135,8 +135,6 @@ public class TestManager : MonoBehaviour {
 
             currentDice.UnRandomizeDice();
 
-            var resetValue = currentDice.GetValue();
-
             testItems[currentValue] = testItems[currentValue] + 1;
 
 
