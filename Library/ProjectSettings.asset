@@ -121,7 +121,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 2.0
+  bundleVersion: 2.1
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -144,7 +144,7 @@ PlayerSettings:
     Android: com.BurlinGames.DiceRoller
     Standalone: com.BurlinGames.DiceRoller
   buildNumber: {}
-  AndroidBundleVersionCode: 4
+  AndroidBundleVersionCode: 5
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -218,7 +218,7 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/Nick Burlingame/Documents/Unity Projects/DiceRoller/KeyStore/DiceRoller.keystore
+  AndroidKeystoreName: C:/Users/Nick Burlingame/Documents/Unity Projects/KeyStore/DiceRoller.keystore
   AndroidKeyaliasName: diceroller
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
